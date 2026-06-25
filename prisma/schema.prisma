@@ -1,0 +1,113 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  GUEST
+  MEMBER
+  ADMIN
+}
+
+enum PostCategory {
+  CHAT
+  SUGGESTION
+  BUILD
+  EVENT
+  OFFICIAL
+}
+
+enum Visibility {
+  PUBLIC
+  PRIVATE
+  TEAM
+}
+
+enum AnnouncementType {
+  MAINTENANCE
+  EVENT
+  UPDATE
+  RULE
+  RECRUIT
+  IMPORTANT
+}
+
+enum GalleryCategory {
+  GROUP
+  EVENT
+  BUILDING
+  NATURE
+  FUTURE
+  SURVIVAL
+}
+
+model User {
+  id             String          @id @default(cuid())
+  username       String          @unique
+  displayName    String
+  avatarUrl      String?
+  role           UserRole        @default(MEMBER)
+  bio            String?
+  joinedAt       DateTime        @default(now())
+  posts          CommunityPost[]
+  profilePosts   ProfilePost[]
+  announcements  Announcement[]
+}
+
+model CommunityPost {
+  id          String       @id @default(cuid())
+  authorId    String
+  title       String?
+  content     String
+  category    PostCategory @default(CHAT)
+  visibility  Visibility   @default(PUBLIC)
+  likes       Int          @default(0)
+  replies     Int          @default(0)
+  pinned      Boolean      @default(false)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  author      User         @relation(fields: [authorId], references: [id])
+
+  @@index([visibility, pinned, createdAt])
+}
+
+model ProfilePost {
+  id          String     @id @default(cuid())
+  authorId    String
+  content     String
+  imageUrl    String?
+  visibility  Visibility @default(PUBLIC)
+  createdAt   DateTime   @default(now())
+  author      User       @relation(fields: [authorId], references: [id])
+}
+
+model Announcement {
+  id          String           @id @default(cuid())
+  title       String
+  slug        String           @unique
+  summary     String
+  content     String
+  type        AnnouncementType @default(IMPORTANT)
+  authorId    String?
+  authorName  String
+  pinned      Boolean          @default(false)
+  publishedAt DateTime         @default(now())
+  author      User?            @relation(fields: [authorId], references: [id])
+
+  @@index([pinned, publishedAt])
+}
+
+model ServerGalleryItem {
+  id          String          @id @default(cuid())
+  title       String
+  category    GalleryCategory
+  description String
+  imageUrl    String
+  featured    Boolean         @default(false)
+  sortOrder   Int             @default(0)
+  createdAt   DateTime        @default(now())
+}
