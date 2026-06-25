@@ -34,7 +34,15 @@ export async function getCommunityPosts() {
 
   const posts = await prisma.communityPost.findMany({
     where: { visibility: "PUBLIC" },
-    include: { author: true },
+    include: {
+      author: true,
+      replyItems: {
+        include: { author: { select: { displayName: true } } },
+        orderBy: { createdAt: "asc" },
+        take: 20
+      },
+      _count: { select: { replyItems: true } }
+    },
     orderBy: [{ pinned: "desc" }, { createdAt: "desc" }]
   });
 

@@ -33,9 +33,19 @@ export type CommunityPost = {
   visibility: Visibility;
   likes: number;
   replies: number;
+  replyItems?: CommunityReply[];
   pinned?: boolean;
   createdAt: string;
   updatedAt?: string;
+};
+
+export type CommunityReply = {
+  id: string;
+  postId: string;
+  authorId: string;
+  authorName: string;
+  content: string;
+  createdAt: string;
 };
 
 export type AnnouncementType = "maintenance" | "event" | "update" | "rule" | "recruit" | "important";

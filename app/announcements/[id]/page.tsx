@@ -30,7 +30,7 @@ export default async function AnnouncementDetailPage({ params }: { params: Promi
         <GlassPanel className="mt-8 p-7 md:p-10">
           <div className="flex flex-wrap items-center gap-3 text-sm text-white/58">
             <span className="rounded-full bg-white/10 px-3 py-1">{announcementTypeLabels[announcement.type]}</span>
-            <span>{announcement.publishedAt}</span>
+            <time dateTime={announcement.publishedAt}>{formatDate(announcement.publishedAt)}</time>
             <span>{announcement.authorName}</span>
           </div>
           <h1 className="mt-6 text-4xl font-black leading-tight tracking-[-0.02em] md:text-6xl">
@@ -44,4 +44,14 @@ export default async function AnnouncementDetailPage({ params }: { params: Promi
       </article>
     </main>
   );
+}
+
+function formatDate(value: string) {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return value;
+  return date.toLocaleDateString("zh-CN", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit"
+  });
 }

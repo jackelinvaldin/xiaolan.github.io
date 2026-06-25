@@ -26,7 +26,15 @@ export async function GET() {
 
   const posts = await prisma.communityPost.findMany({
     where: { visibility: "PUBLIC" },
-    include: { author: { select: { displayName: true } } },
+    include: {
+      author: { select: { displayName: true } },
+      replyItems: {
+        include: { author: { select: { displayName: true } } },
+        orderBy: { createdAt: "asc" },
+        take: 20
+      },
+      _count: { select: { replyItems: true } }
+    },
     orderBy: [{ pinned: "desc" }, { createdAt: "desc" }],
     take: 100
   });
@@ -55,9 +63,15 @@ export async function POST(request: Request) {
       title: parsed.data.title?.trim() || "新的社区留言",
       content: parsed.data.content.trim(),
       category: categoryMap[parsed.data.category],
-      visibility: "PUBLIC"
+      visibility: "PUBLIC",
+      likes: 0,
+      replies: 0
     },
-    include: { author: { select: { displayName: true } } }
+    include: {
+      author: { select: { displayName: true } },
+      replyItems: true,
+      _count: { select: { replyItems: true } }
+    }
   });
 
   return NextResponse.json({ data: toCommunityPost(post) }, { status: 201 });

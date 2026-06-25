@@ -51,7 +51,6 @@ export default function TeamPage() {
                   </div>
                   <div>
                     <h2 className="text-3xl font-black">{member.formalName}</h2>
-                    <p className="mt-1 text-sm text-white/50">日常展示名：{member.displayName}</p>
                     <p className="mt-4 text-lg font-semibold text-dream-blue">{member.role}</p>
                     <p className="mt-3 text-sm leading-7 text-white/66">{member.description}</p>
                   </div>

@@ -7,7 +7,7 @@ import { useMockSession } from "@/components/auth/useMockSession";
 import { GlassPanel } from "@/components/layout/GlassPanel";
 import { canCreatePost, roleLabels } from "@/lib/auth";
 import { categoryLabels } from "@/lib/data/community";
-import type { CommunityCategory, CommunityPost } from "@/lib/data/types";
+import type { CommunityCategory, CommunityPost, CommunityReply } from "@/lib/data/types";
 
 export function CommunityFeed({ initialPosts }: { initialPosts: CommunityPost[] }) {
   const { role, ready } = useMockSession();
@@ -16,6 +16,8 @@ export function CommunityFeed({ initialPosts }: { initialPosts: CommunityPost[] 
   const [content, setContent] = useState("");
   const [category, setCategory] = useState<CommunityCategory>("chat");
   const [pending, setPending] = useState(false);
+  const [replyPending, setReplyPending] = useState<Record<string, boolean>>({});
+  const [replyDrafts, setReplyDrafts] = useState<Record<string, string>>({});
   const [error, setError] = useState("");
 
   const sortedPosts = useMemo(
@@ -66,6 +68,47 @@ export function CommunityFeed({ initialPosts }: { initialPosts: CommunityPost[] 
       setPosts((current) => current.map((item) => (item.id === id ? { ...item, likes: data.likes! } : item)));
     } catch (err) {
       setError(err instanceof Error ? err.message : "点赞失败");
+    }
+  }
+
+  async function submitReply(event: React.FormEvent<HTMLFormElement>, postId: string) {
+    event.preventDefault();
+    const content = replyDrafts[postId]?.trim();
+    if (!canCreatePost(role) || !content) return;
+
+    setReplyPending((current) => ({ ...current, [postId]: true }));
+    setError("");
+    try {
+      const response = await fetch(`/api/community/${postId}/replies`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ content })
+      });
+      const data = (await response.json()) as {
+        data?: CommunityReply;
+        replies?: number;
+        error?: string;
+      };
+      if (!response.ok || !data.data || typeof data.replies !== "number") {
+        throw new Error(data.error ?? "回复失败");
+      }
+
+      setPosts((current) =>
+        current.map((item) =>
+          item.id === postId
+            ? {
+                ...item,
+                replies: data.replies!,
+                replyItems: [...(item.replyItems ?? []), data.data!]
+              }
+            : item
+        )
+      );
+      setReplyDrafts((current) => ({ ...current, [postId]: "" }));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "回复失败");
+    } finally {
+      setReplyPending((current) => ({ ...current, [postId]: false }));
     }
   }
 
@@ -179,6 +222,39 @@ export function CommunityFeed({ initialPosts }: { initialPosts: CommunityPost[] 
                 回复 {post.replies}
               </span>
             </div>
+            {post.replyItems?.length ? (
+              <div className="mt-5 grid gap-3 rounded-[22px] border border-white/10 bg-white/[0.04] p-4">
+                {post.replyItems.map((reply) => (
+                  <div key={reply.id} className="border-b border-white/8 pb-3 last:border-b-0 last:pb-0">
+                    <div className="flex flex-wrap items-center gap-2 text-xs text-white/46">
+                      <span className="font-semibold text-white/72">{reply.authorName}</span>
+                      <span>{formatDate(reply.createdAt)}</span>
+                    </div>
+                    <p className="mt-2 text-sm leading-6 text-white/68">{reply.content}</p>
+                  </div>
+                ))}
+              </div>
+            ) : null}
+            {canCreatePost(role) ? (
+              <form className="mt-4 flex flex-col gap-3 sm:flex-row" onSubmit={(event) => void submitReply(event, post.id)}>
+                <input
+                  value={replyDrafts[post.id] ?? ""}
+                  onChange={(event) =>
+                    setReplyDrafts((current) => ({ ...current, [post.id]: event.target.value }))
+                  }
+                  placeholder="写一条回复"
+                  className="min-h-11 flex-1 rounded-full border border-white/14 bg-white/[0.08] px-4 text-sm text-white outline-none transition placeholder:text-white/38 focus:border-starlight-pink"
+                />
+                <button
+                  type="submit"
+                  disabled={replyPending[post.id] || !replyDrafts[post.id]?.trim()}
+                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 text-sm font-semibold text-white transition hover:bg-white/16 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  <PaperPlaneTilt size={16} weight="fill" />
+                  {replyPending[post.id] ? "回复中" : "回复"}
+                </button>
+              </form>
+            ) : null}
           </article>
         ))}
       </div>

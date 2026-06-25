@@ -8,8 +8,7 @@ export const teamMembers: TeamMember[] = [
     role: "服务器策划",
     accent: "#82C7FF",
     avatarUrl: "/images/ui/nahida-avatar.png",
-    description:
-      "负责服务器整体方向、玩法构思和网站内容规划。正式介绍使用蓝水梦尘，社区日常文本使用小蓝。纳西妲天下第一可爱。"
+    description: "负责服务器整体方向、玩法构思和网站内容规划。纳西妲天下第一可爱。"
   },
   {
     id: "gravity",
@@ -38,4 +37,4 @@ export const teamMembers: TeamMember[] = [
 ];
 
 export const teamIntro =
-  "琢光绮梦是由蓝水梦尘、爱莉、The Gravity、独木桥等成员组成的 Minecraft 服务器创作团队。我们围绕服务器策划、运行维护、活动协助与地图创作展开协作，希望在方块世界里创造一个有温度、有风景、有故事的社区空间。";
+  "琢光绮梦是由小蓝、爱莉、The Gravity、独木桥等成员组成的 Minecraft 服务器创作团队。我们围绕服务器策划、运行维护、活动协助与地图创作展开协作，希望在方块世界里创造一个有温度、有风景、有故事的社区空间。";

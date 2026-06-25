@@ -1,5 +1,7 @@
 import type { Announcement } from "./types";
 
+const now = new Date().toISOString();
+
 export const announcementTypeLabels: Record<Announcement["type"], string> = {
   maintenance: "服务器维护",
   event: "活动公告",
@@ -20,7 +22,7 @@ export const announcements: Announcement[] = [
     type: "event",
     authorName: "爱莉",
     pinned: true,
-    publishedAt: "2026-06-25"
+    publishedAt: now
   },
   {
     id: "a-002",
@@ -31,7 +33,7 @@ export const announcements: Announcement[] = [
       "为保证服务器稳定运行，The Gravity 将在今晚进行区块缓存清理、插件版本核对和备份校验。维护期间玩家无法进入服务器，请提前保存背包和当前位置。",
     type: "maintenance",
     authorName: "The Gravity",
-    publishedAt: "2026-06-24"
+    publishedAt: now
   },
   {
     id: "a-003",
@@ -42,6 +44,6 @@ export const announcements: Announcement[] = [
       "星环之境是独木桥正在制作的未来遗构地图。当前版本包含雨幕平台、空中环形结构、探索路线和临时坐标档案，适合小队探索和截图巡礼。",
     type: "update",
     authorName: "独木桥",
-    publishedAt: "2026-06-23"
+    publishedAt: now
   }
 ];

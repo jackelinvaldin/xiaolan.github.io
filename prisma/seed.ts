@@ -55,8 +55,7 @@ async function main() {
         displayName: user.displayName,
         avatarUrl: user.avatarUrl,
         role: "MEMBER",
-        bio: user.bio,
-        joinedAt: new Date(user.joinedAt)
+        bio: user.bio
       }
     });
   }
@@ -73,8 +72,7 @@ async function main() {
         content: announcement.content,
         type: announcementTypeMap[announcement.type],
         authorName: announcement.authorName,
-        pinned: announcement.pinned ?? false,
-        publishedAt: new Date(announcement.publishedAt)
+        pinned: announcement.pinned ?? false
       }
     });
   }
@@ -90,10 +88,9 @@ async function main() {
         content: post.content,
         category: categoryMap[post.category],
         visibility: visibilityMap[post.visibility],
-        likes: post.likes,
-        replies: post.replies,
-        pinned: post.pinned ?? false,
-        createdAt: new Date(post.createdAt)
+        likes: 0,
+        replies: 0,
+        pinned: post.pinned ?? false
       }
     });
   }
@@ -107,8 +104,7 @@ async function main() {
         authorId: post.authorId,
         content: post.content,
         imageUrl: post.imageUrl,
-        visibility: visibilityMap[post.visibility],
-        createdAt: new Date(post.createdAt)
+        visibility: visibilityMap[post.visibility]
       }
     });
   }

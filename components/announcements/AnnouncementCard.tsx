@@ -11,6 +11,8 @@ export function AnnouncementCard({
   announcement: Announcement;
   compact?: boolean;
 }) {
+  const date = formatDate(announcement.publishedAt);
+
   return (
     <article
       className={cn(
@@ -23,7 +25,9 @@ export function AnnouncementCard({
           <MegaphoneSimple size={14} />
           {announcementTypeLabels[announcement.type]}
         </span>
-        <time className="text-xs text-white/46">{announcement.publishedAt}</time>
+        <time className="text-xs text-white/46" dateTime={announcement.publishedAt}>
+          {date}
+        </time>
       </div>
       <h3 className="mt-4 text-xl font-bold leading-tight text-white">{announcement.title}</h3>
       <p className={cn("mt-3 text-sm leading-7 text-white/66", compact && "line-clamp-2")}>
@@ -37,4 +41,14 @@ export function AnnouncementCard({
       </Link>
     </article>
   );
+}
+
+function formatDate(value: string) {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return value;
+  return date.toLocaleDateString("zh-CN", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit"
+  });
 }

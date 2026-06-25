@@ -1,4 +1,4 @@
-import type { Announcement, CommunityPost, ProfilePost, User } from "@/lib/data/types";
+import type { Announcement, CommunityPost, CommunityReply, ProfilePost, User } from "@/lib/data/types";
 
 export function toRole(role: string) {
   return role.toLowerCase() as User["role"];
@@ -49,6 +49,15 @@ export function toCommunityPost(post: {
   createdAt: Date;
   updatedAt?: Date | null;
   author?: { displayName: string } | null;
+  replyItems?: Array<{
+    id: string;
+    postId: string;
+    authorId: string;
+    content: string;
+    createdAt: Date;
+    author?: { displayName: string } | null;
+  }>;
+  _count?: { replyItems?: number };
 }): CommunityPost {
   return {
     id: post.id,
@@ -59,10 +68,29 @@ export function toCommunityPost(post: {
     category: toCategory(post.category),
     visibility: toVisibility(post.visibility),
     likes: post.likes,
-    replies: post.replies,
+    replies: post._count?.replyItems ?? post.replyItems?.length ?? post.replies,
+    replyItems: post.replyItems?.map(toCommunityReply),
     pinned: post.pinned,
     createdAt: post.createdAt.toISOString(),
     updatedAt: post.updatedAt?.toISOString()
+  };
+}
+
+export function toCommunityReply(reply: {
+  id: string;
+  postId: string;
+  authorId: string;
+  content: string;
+  createdAt: Date;
+  author?: { displayName: string } | null;
+}): CommunityReply {
+  return {
+    id: reply.id,
+    postId: reply.postId,
+    authorId: reply.authorId,
+    authorName: reply.author?.displayName ?? "成员",
+    content: reply.content,
+    createdAt: reply.createdAt.toISOString()
   };
 }
 

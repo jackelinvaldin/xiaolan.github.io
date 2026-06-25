@@ -193,7 +193,7 @@ export default async function HomePage() {
                 <article key={post.id} className="rounded-[22px] border border-white/10 bg-white/[0.06] p-5">
                   <div className="flex flex-wrap items-center gap-3 text-sm text-white/52">
                     <span>{post.authorName}</span>
-                    <span>{post.createdAt}</span>
+                    <time dateTime={post.createdAt}>{formatDateTime(post.createdAt)}</time>
                   </div>
                   <h3 className="mt-3 text-xl font-bold">{post.title}</h3>
                   <p className="mt-3 text-sm leading-7 text-white/62">{post.content}</p>
@@ -224,4 +224,15 @@ export default async function HomePage() {
       </MotionSection>
     </main>
   );
+}
+
+function formatDateTime(value: string) {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return value;
+  return date.toLocaleString("zh-CN", {
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit"
+  });
 }
