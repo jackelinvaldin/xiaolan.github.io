@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BookmarkSimple, Eye, LockSimple, PaperPlaneTilt, UserCircle } from "@phosphor-icons/react";
 import { ActionButton } from "@/components/ActionButton";
 import { useMockSession } from "@/components/auth/useMockSession";
@@ -14,6 +14,35 @@ export function ProfileSpace({ initialPosts }: { initialPosts: ProfilePost[] }) 
   const [posts, setPosts] = useState(initialPosts);
   const [content, setContent] = useState("");
   const [visibility, setVisibility] = useState<Visibility>("public");
+  const [loadingPosts, setLoadingPosts] = useState(false);
+  const [pending, setPending] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (!ready || !canAccessProfile(role)) return;
+
+    let active = true;
+    setLoadingPosts(true);
+    setError("");
+    fetch("/api/profile-posts", { cache: "no-store" })
+      .then(async (response) => {
+        const data = (await response.json()) as { data?: ProfilePost[]; error?: string };
+        if (!response.ok || !data.data) {
+          throw new Error(data.error ?? "动态读取失败");
+        }
+        if (active) setPosts(data.data);
+      })
+      .catch((err) => {
+        if (active) setError(err instanceof Error ? err.message : "动态读取失败");
+      })
+      .finally(() => {
+        if (active) setLoadingPosts(false);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [ready, role]);
 
   if (!ready) {
     return <GlassPanel className="p-8">正在读取个人空间状态...</GlassPanel>;
@@ -37,20 +66,40 @@ export function ProfileSpace({ initialPosts }: { initialPosts: ProfilePost[] }) 
     );
   }
 
-  function submitPost(event: React.FormEvent<HTMLFormElement>) {
+  async function submitPost(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!content.trim()) return;
-    setPosts((current) => [
-      {
-        id: `local-profile-${Date.now()}`,
-        authorId: "local",
-        content: content.trim(),
-        visibility,
-        createdAt: "刚刚"
-      },
-      ...current
-    ]);
-    setContent("");
+
+    setPending(true);
+    setError("");
+    try {
+      const response = await fetch("/api/profile-posts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ content: content.trim(), visibility })
+      });
+      const data = (await response.json()) as { data?: ProfilePost; error?: string };
+      if (!response.ok || !data.data) {
+        throw new Error(data.error ?? "动态发布失败");
+      }
+      setPosts((current) => [data.data!, ...current]);
+      setContent("");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "动态发布失败");
+    } finally {
+      setPending(false);
+    }
+  }
+
+  function formatDate(value: string) {
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return value;
+    return date.toLocaleString("zh-CN", {
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit"
+    });
   }
 
   return (
@@ -75,7 +124,7 @@ export function ProfileSpace({ initialPosts }: { initialPosts: ProfilePost[] }) 
               onClick={logout}
               className="mt-5 rounded-full border border-white/14 px-4 py-2 text-sm text-white/70 transition hover:bg-white/10"
             >
-              退出预览身份
+              退出登录
             </button>
           </div>
         </GlassPanel>
@@ -119,18 +168,22 @@ export function ProfileSpace({ initialPosts }: { initialPosts: ProfilePost[] }) 
             </label>
             <button
               type="submit"
-              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[linear-gradient(135deg,#ff9fe6,#a78bfa_52%,#82c7ff)] px-5 font-bold text-[#07101f]"
+              disabled={pending}
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[linear-gradient(135deg,#ff9fe6,#a78bfa_52%,#82c7ff)] px-5 font-bold text-[#07101f] transition disabled:cursor-not-allowed disabled:opacity-60"
             >
               <PaperPlaneTilt size={18} weight="fill" />
-              发布动态
+              {pending ? "发布中..." : "发布动态"}
             </button>
+            {error ? <p className="text-sm text-starlight-pink">{error}</p> : null}
           </form>
         </GlassPanel>
+
+        {loadingPosts ? <GlassPanel className="p-6 text-white/64">正在读取动态...</GlassPanel> : null}
 
         {posts.map((post) => (
           <article key={post.id} className="rounded-[28px] border border-white/12 bg-white/[0.07] p-5">
             <div className="flex items-center justify-between gap-3 text-sm text-white/52">
-              <span>{post.createdAt}</span>
+              <span>{formatDate(post.createdAt)}</span>
               <span className="inline-flex items-center gap-2 rounded-full border border-white/12 px-3 py-1">
                 {post.visibility === "public" ? <Eye size={15} /> : <LockSimple size={15} />}
                 {post.visibility === "public" ? "公开" : "私密"}

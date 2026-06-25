@@ -1,16 +1,12 @@
+import { randomUUID } from "node:crypto";
 import { PrismaClient } from "@prisma/client";
 import { announcements } from "../lib/data/announcements";
 import { communityPosts, profilePosts } from "../lib/data/community";
 import { serverGallery } from "../lib/data/server-gallery";
 import { users } from "../lib/data/users";
+import { hashPassword } from "../lib/server/password";
 
 const prisma = new PrismaClient();
-
-const roleMap = {
-  guest: "GUEST",
-  member: "MEMBER",
-  admin: "ADMIN"
-} as const;
 
 const categoryMap = {
   chat: "CHAT",
@@ -48,13 +44,17 @@ async function main() {
   for (const user of users) {
     await prisma.user.upsert({
       where: { username: user.username },
-      update: {},
+      update: {
+        role: "MEMBER",
+        disabled: false
+      },
       create: {
         id: user.id,
         username: user.username,
+        passwordHash: hashPassword(randomUUID()),
         displayName: user.displayName,
         avatarUrl: user.avatarUrl,
-        role: roleMap[user.role],
+        role: "MEMBER",
         bio: user.bio,
         joinedAt: new Date(user.joinedAt)
       }

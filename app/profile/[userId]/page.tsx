@@ -2,25 +2,24 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Eye, UserCircle } from "@phosphor-icons/react/dist/ssr";
 import { GlassPanel } from "@/components/layout/GlassPanel";
-import { profilePosts } from "@/lib/data/community";
-import { users } from "@/lib/data/users";
+import { getProfilePosts, getUserByIdOrUsername } from "@/lib/repository";
 
-export function generateStaticParams() {
-  return users.map((user) => ({ userId: user.id }));
-}
+export const dynamic = "force-dynamic";
 
-export function generateMetadata({ params }: { params: { userId: string } }) {
-  const user = users.find((item) => item.id === params.userId || item.username === params.userId);
+export async function generateMetadata({ params }: { params: Promise<{ userId: string }> }) {
+  const { userId } = await params;
+  const user = await getUserByIdOrUsername(userId);
   return {
     title: user ? `${user.displayName}的公开空间` : "公开空间"
   };
 }
 
-export default function PublicProfilePage({ params }: { params: { userId: string } }) {
-  const user = users.find((item) => item.id === params.userId || item.username === params.userId);
+export default async function PublicProfilePage({ params }: { params: Promise<{ userId: string }> }) {
+  const { userId } = await params;
+  const user = await getUserByIdOrUsername(userId);
   if (!user) notFound();
 
-  const posts = profilePosts.filter((post) => post.authorId === user.id && post.visibility === "public");
+  const posts = await getProfilePosts(user.id, false);
 
   return (
     <main className="px-4 pb-24 pt-32">

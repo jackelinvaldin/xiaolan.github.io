@@ -1,11 +1,16 @@
 import { AnnouncementCard } from "@/components/announcements/AnnouncementCard";
-import { announcementTypeLabels, announcements } from "@/lib/data/announcements";
+import { announcementTypeLabels } from "@/lib/data/announcements";
+import { getAnnouncements } from "@/lib/repository";
 
 export const metadata = {
   title: "公告列表"
 };
 
-export default function AnnouncementsPage() {
+export const dynamic = "force-dynamic";
+
+export default async function AnnouncementsPage() {
+  const announcements = await getAnnouncements();
+
   return (
     <main className="px-4 pb-24 pt-32">
       <section className="mx-auto max-w-7xl">

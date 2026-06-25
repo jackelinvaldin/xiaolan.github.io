@@ -7,6 +7,7 @@ export type TeamMember = {
   role: string;
   description: string;
   accent: string;
+  avatarUrl?: string;
 };
 
 export type User = {

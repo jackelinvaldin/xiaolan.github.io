@@ -3,7 +3,10 @@ import { Noto_Sans_SC, Noto_Serif_SC } from "next/font/google";
 import "./globals.css";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
+import { PointerGlow } from "@/components/PointerGlow";
 import { siteName } from "@/lib/data/site";
+
+const siteDescription = "蓝水警尘梦，夜吟开草堂";
 
 const notoSans = Noto_Sans_SC({
   subsets: ["latin"],
@@ -25,10 +28,19 @@ export const metadata: Metadata = {
     default: `${siteName}官网`,
     template: `%s | ${siteName}`
   },
-  description: "琢光绮梦 Minecraft 服务器创作团队官网，展示服务器、公告、社区互动和个人空间。",
+  description: siteDescription,
   openGraph: {
     title: `${siteName}官网`,
-    description: "一个属于创造者与玩家的方块梦境。",
+    description: siteDescription,
+    siteName,
+    locale: "zh_CN",
+    type: "website",
+    images: ["/images/server/server-home-reading.jpg"]
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${siteName}官网`,
+    description: siteDescription,
     images: ["/images/server/server-home-reading.jpg"]
   }
 };
@@ -37,6 +49,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="zh-CN" className={`${notoSans.variable} ${notoSerif.variable}`}>
       <body className="font-sans antialiased">
+        <PointerGlow />
         <SiteHeader />
         {children}
         <SiteFooter />

@@ -1,11 +1,15 @@
 import { CommunityFeed } from "@/components/community/CommunityFeed";
-import { communityPosts } from "@/lib/data/community";
+import { getCommunityPosts } from "@/lib/repository";
 
 export const metadata = {
   title: "社区发言区"
 };
 
-export default function CommunityPage() {
+export const dynamic = "force-dynamic";
+
+export default async function CommunityPage() {
+  const communityPosts = await getCommunityPosts();
+
   return (
     <main className="px-4 pb-24 pt-32">
       <section className="mx-auto max-w-7xl">

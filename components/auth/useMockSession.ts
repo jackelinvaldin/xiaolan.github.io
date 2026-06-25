@@ -1,69 +1,61 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
+import { useCallback, useEffect, useState } from "react";
 import type { UserRole } from "@/lib/data/types";
 
-const roleKey = "zq_role";
-const nameKey = "zq_display_name";
-const sessionEvent = "zq_session_changed";
-
-type SessionSnapshot = {
+type SessionState = {
+  id?: string;
+  username?: string;
   role: UserRole;
   displayName: string;
+  ready: boolean;
 };
 
-const fallbackSession: SessionSnapshot = {
+const guestSession: SessionState = {
   role: "guest",
-  displayName: "游客"
+  displayName: "游客",
+  ready: false
 };
-
-let cachedSession = fallbackSession;
-
-function normalizeRole(role: string | null): UserRole {
-  return role === "member" || role === "admin" ? role : "guest";
-}
-
-function defaultName(role: UserRole) {
-  if (role === "admin") return "小蓝";
-  if (role === "member") return "爱莉";
-  return "游客";
-}
-
-function getSnapshot(): SessionSnapshot {
-  if (typeof window === "undefined") return fallbackSession;
-  const role = normalizeRole(window.localStorage.getItem(roleKey));
-  const displayName = window.localStorage.getItem(nameKey) ?? defaultName(role);
-
-  if (cachedSession.role === role && cachedSession.displayName === displayName) {
-    return cachedSession;
-  }
-
-  cachedSession = { role, displayName };
-  return cachedSession;
-}
-
-function subscribe(callback: () => void) {
-  window.addEventListener("storage", callback);
-  window.addEventListener(sessionEvent, callback);
-  return () => {
-    window.removeEventListener("storage", callback);
-    window.removeEventListener(sessionEvent, callback);
-  };
-}
 
 export function useMockSession() {
-  const session = useSyncExternalStore(subscribe, getSnapshot, () => fallbackSession);
+  const [session, setSession] = useState<SessionState>(guestSession);
 
-  function setRole(nextRole: UserRole, nextName?: string) {
-    const name = nextName ?? defaultName(nextRole);
-    window.localStorage.setItem(roleKey, nextRole);
-    window.localStorage.setItem(nameKey, name);
-    window.dispatchEvent(new Event(sessionEvent));
+  const refresh = useCallback(async () => {
+    try {
+      const response = await fetch("/api/auth/me", { cache: "no-store" });
+      const data = (await response.json()) as {
+        user?: {
+          id: string;
+          username: string;
+          displayName: string;
+          role: UserRole;
+        } | null;
+      };
+
+      if (data.user) {
+        setSession({
+          id: data.user.id,
+          username: data.user.username,
+          role: data.user.role,
+          displayName: data.user.displayName,
+          ready: true
+        });
+      } else {
+        setSession({ role: "guest", displayName: "游客", ready: true });
+      }
+    } catch {
+      setSession({ role: "guest", displayName: "游客", ready: true });
+    }
+  }, []);
+
+  useEffect(() => {
+    void refresh();
+  }, [refresh]);
+
+  async function logout() {
+    await fetch("/api/auth/logout", { method: "POST" });
+    setSession({ role: "guest", displayName: "游客", ready: true });
   }
 
-  function logout() {
-    setRole("guest", "游客");
-  }
-
-  return { role: session.role, displayName: session.displayName, ready: true, setRole, logout };
+  return { ...session, refresh, logout };
 }

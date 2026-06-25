@@ -1,60 +1,85 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { SignIn, ShieldCheck, UserCircle } from "@phosphor-icons/react";
+import { useState } from "react";
+import { SignIn } from "@phosphor-icons/react";
 import { GlassPanel } from "@/components/layout/GlassPanel";
-import { useMockSession } from "@/components/auth/useMockSession";
-
-const options = [
-  {
-    role: "member" as const,
-    name: "爱莉",
-    title: "普通成员",
-    text: "可以发言、点赞、回复，并进入个人空间发布动态。",
-    icon: UserCircle
-  },
-  {
-    role: "admin" as const,
-    name: "小蓝",
-    title: "管理员",
-    text: "可以预览公告、社区、用户和服务器图片管理界面。",
-    icon: ShieldCheck
-  }
-];
+import type { UserRole } from "@/lib/data/types";
 
 export function LoginPanel() {
   const router = useRouter();
-  const { setRole } = useMockSession();
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  async function submit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setError("");
+    setLoading(true);
+
+    const response = await fetch("/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password })
+    });
+    const data = (await response.json()) as { error?: string; user?: { role: UserRole } };
+    setLoading(false);
+
+    if (!response.ok || !data.user) {
+      setError(data.error ?? "登录失败");
+      return;
+    }
+
+    router.push(data.user.role === "admin" ? "/admin" : "/profile");
+    router.refresh();
+  }
 
   return (
     <GlassPanel className="mx-auto max-w-3xl p-6 md:p-8">
       <div className="flex items-center gap-3">
         <SignIn size={28} className="text-dream-blue" />
         <div>
-          <h1 className="text-3xl font-black md:text-5xl">登录预览</h1>
-          <p className="mt-2 text-sm text-white/62">MVP 使用 mock 登录状态，方便先调 UI 和权限流。</p>
+          <h1 className="text-3xl font-black md:text-5xl">登录</h1>
+          <p className="mt-2 text-sm text-white/62">成员登录后可以留言和发布动态，管理员可以发布公告。</p>
         </div>
       </div>
-      <div className="mt-8 grid gap-4 md:grid-cols-2">
-        {options.map((option) => {
-          const Icon = option.icon;
-          return (
-            <button
-              key={option.role}
-              type="button"
-              className="rounded-[28px] border border-white/12 bg-white/[0.07] p-5 text-left transition hover:-translate-y-1 hover:border-starlight-pink/42 hover:bg-white/[0.1]"
-              onClick={() => {
-                setRole(option.role, option.name);
-                router.push(option.role === "admin" ? "/admin" : "/profile");
-              }}
-            >
-              <Icon size={30} className="text-starlight-pink" />
-              <h2 className="mt-4 text-2xl font-bold">{option.title}</h2>
-              <p className="mt-3 text-sm leading-7 text-white/64">{option.text}</p>
-            </button>
-          );
-        })}
-      </div>
+      <form className="mt-8 grid gap-5" onSubmit={submit}>
+        <label className="grid gap-2">
+          <span className="text-sm font-semibold text-white/78">用户名</span>
+          <input
+            value={username}
+            onChange={(event) => setUsername(event.target.value)}
+            autoComplete="username"
+            className="h-12 rounded-2xl border border-white/14 bg-white/[0.08] px-4 text-white outline-none transition placeholder:text-white/40 focus:border-starlight-pink"
+          />
+        </label>
+        <label className="grid gap-2">
+          <span className="text-sm font-semibold text-white/78">密码</span>
+          <input
+            type="password"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            autoComplete="current-password"
+            className="h-12 rounded-2xl border border-white/14 bg-white/[0.08] px-4 text-white outline-none transition placeholder:text-white/40 focus:border-starlight-pink"
+          />
+        </label>
+        {error ? <p className="rounded-2xl border border-red-300/30 bg-red-500/10 p-3 text-sm text-red-100">{error}</p> : null}
+        <button
+          type="submit"
+          disabled={loading}
+          className="min-h-12 rounded-full border border-white/20 bg-white/18 px-6 font-bold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.2),0_18px_46px_rgba(255,159,230,0.18)] backdrop-blur-2xl transition hover:bg-white/24 disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          {loading ? "登录中..." : "登录"}
+        </button>
+        <p className="text-sm text-white/62">
+          没有账号？{" "}
+          <Link href="/register" className="font-semibold text-dream-blue">
+            注册普通成员
+          </Link>
+        </p>
+      </form>
     </GlassPanel>
   );
 }

@@ -2,21 +2,22 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "@phosphor-icons/react/dist/ssr";
 import { GlassPanel } from "@/components/layout/GlassPanel";
-import { announcementTypeLabels, announcements } from "@/lib/data/announcements";
+import { announcementTypeLabels } from "@/lib/data/announcements";
+import { getAnnouncementById } from "@/lib/repository";
 
-export function generateStaticParams() {
-  return announcements.map((announcement) => ({ id: announcement.slug }));
-}
+export const dynamic = "force-dynamic";
 
-export function generateMetadata({ params }: { params: { id: string } }) {
-  const announcement = announcements.find((item) => item.slug === params.id || item.id === params.id);
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const announcement = await getAnnouncementById(id);
   return {
     title: announcement?.title ?? "公告详情"
   };
 }
 
-export default function AnnouncementDetailPage({ params }: { params: { id: string } }) {
-  const announcement = announcements.find((item) => item.slug === params.id || item.id === params.id);
+export default async function AnnouncementDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const announcement = await getAnnouncementById(id);
   if (!announcement) notFound();
 
   return (

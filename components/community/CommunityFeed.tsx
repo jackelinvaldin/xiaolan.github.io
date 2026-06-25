@@ -10,37 +10,74 @@ import { categoryLabels } from "@/lib/data/community";
 import type { CommunityCategory, CommunityPost } from "@/lib/data/types";
 
 export function CommunityFeed({ initialPosts }: { initialPosts: CommunityPost[] }) {
-  const { role, displayName, ready } = useMockSession();
+  const { role, ready } = useMockSession();
   const [posts, setPosts] = useState(initialPosts);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [category, setCategory] = useState<CommunityCategory>("chat");
+  const [pending, setPending] = useState(false);
+  const [error, setError] = useState("");
 
   const sortedPosts = useMemo(
     () => [...posts].sort((a, b) => Number(Boolean(b.pinned)) - Number(Boolean(a.pinned))),
     [posts]
   );
 
-  function submitPost(event: React.FormEvent<HTMLFormElement>) {
+  async function submitPost(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!canCreatePost(role) || !content.trim()) return;
 
-    const post: CommunityPost = {
-      id: `local-${Date.now()}`,
-      authorId: "local",
-      authorName: displayName,
-      title: title.trim() || "新的社区留言",
-      content: content.trim(),
-      category,
-      visibility: "public",
-      likes: 0,
-      replies: 0,
-      createdAt: "刚刚"
-    };
+    setPending(true);
+    setError("");
+    try {
+      const response = await fetch("/api/community", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: title.trim(),
+          content: content.trim(),
+          category
+        })
+      });
+      const data = (await response.json()) as { data?: CommunityPost; error?: string };
+      if (!response.ok || !data.data) {
+        throw new Error(data.error ?? "发布失败");
+      }
 
-    setPosts((current) => [post, ...current]);
-    setTitle("");
-    setContent("");
+      setPosts((current) => [data.data!, ...current]);
+      setTitle("");
+      setContent("");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "发布失败");
+    } finally {
+      setPending(false);
+    }
+  }
+
+  async function likePost(id: string) {
+    if (!canCreatePost(role)) return;
+    setError("");
+    try {
+      const response = await fetch(`/api/community/${id}/like`, { method: "POST" });
+      const data = (await response.json()) as { likes?: number; error?: string };
+      if (!response.ok || typeof data.likes !== "number") {
+        throw new Error(data.error ?? "点赞失败");
+      }
+      setPosts((current) => current.map((item) => (item.id === id ? { ...item, likes: data.likes! } : item)));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "点赞失败");
+    }
+  }
+
+  function formatDate(value: string) {
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return value;
+    return date.toLocaleString("zh-CN", {
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit"
+    });
   }
 
   return (
@@ -89,11 +126,13 @@ export function CommunityFeed({ initialPosts }: { initialPosts: CommunityPost[] 
             </label>
             <button
               type="submit"
-              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[linear-gradient(135deg,#ff9fe6,#a78bfa_52%,#82c7ff)] px-5 font-bold text-[#07101f]"
+              disabled={pending}
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[linear-gradient(135deg,#ff9fe6,#a78bfa_52%,#82c7ff)] px-5 font-bold text-[#07101f] transition disabled:cursor-not-allowed disabled:opacity-60"
             >
               <PaperPlaneTilt size={18} weight="fill" />
-              发布留言
+              {pending ? "发布中..." : "发布留言"}
             </button>
+            {error ? <p className="text-sm text-starlight-pink">{error}</p> : null}
           </form>
         ) : (
           <div className="mt-6 rounded-[24px] border border-white/12 bg-white/[0.06] p-5">
@@ -115,7 +154,7 @@ export function CommunityFeed({ initialPosts }: { initialPosts: CommunityPost[] 
               <div className="flex flex-wrap items-center gap-3 text-sm text-white/52">
                 <span className="font-semibold text-white/78">{post.authorName}</span>
                 <span>{categoryLabels[post.category]}</span>
-                <span>{post.createdAt}</span>
+                <span>{formatDate(post.createdAt)}</span>
               </div>
               {post.pinned ? (
                 <span className="inline-flex items-center gap-1 rounded-full bg-starlight-pink px-3 py-1 text-xs font-bold text-[#07101f]">
@@ -130,11 +169,7 @@ export function CommunityFeed({ initialPosts }: { initialPosts: CommunityPost[] 
               <button
                 type="button"
                 disabled={!canCreatePost(role)}
-                onClick={() =>
-                  setPosts((current) =>
-                    current.map((item) => (item.id === post.id ? { ...item, likes: item.likes + 1 } : item))
-                  )
-                }
+                onClick={() => void likePost(post.id)}
                 className="inline-flex items-center gap-2 rounded-full border border-white/12 px-3 py-2 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <Heart size={16} />

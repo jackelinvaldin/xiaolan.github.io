@@ -1,21 +1,47 @@
 import { NextResponse } from "next/server";
-import { announcements } from "@/lib/data/announcements";
-import { communityPosts } from "@/lib/data/community";
-import { serverGallery } from "@/lib/data/server-gallery";
-import { users } from "@/lib/data/users";
+import { hasDatabase, prisma } from "@/lib/db/prisma";
+import { getCurrentUser } from "@/lib/server/session";
+import { toAnnouncement, toCommunityPost, toUser } from "@/lib/server/mappers";
 
-export async function GET(request: Request) {
-  const role = request.headers.get("x-user-role");
-  if (role !== "admin") {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+export async function GET() {
+  if (!hasDatabase()) {
+    return NextResponse.json({ error: "服务器尚未配置数据库，后台暂不可用" }, { status: 503 });
   }
+
+  const user = await getCurrentUser();
+  if (!user) {
+    return NextResponse.json({ error: "请先登录管理员账号" }, { status: 401 });
+  }
+  if (user.role !== "admin") {
+    return NextResponse.json({ error: "只有管理员可以访问后台" }, { status: 403 });
+  }
+
+  const [announcementCount, communityPostCount, userCount, galleryItemCount, announcements, posts, users] =
+    await Promise.all([
+      prisma.announcement.count(),
+      prisma.communityPost.count(),
+      prisma.user.count(),
+      prisma.serverGalleryItem.count(),
+      prisma.announcement.findMany({ orderBy: { publishedAt: "desc" }, take: 8 }),
+      prisma.communityPost.findMany({
+        include: { author: { select: { displayName: true } } },
+        orderBy: { createdAt: "desc" },
+        take: 8
+      }),
+      prisma.user.findMany({ orderBy: { joinedAt: "desc" }, take: 8 })
+    ]);
 
   return NextResponse.json({
     data: {
-      announcements: announcements.length,
-      communityPosts: communityPosts.length,
-      users: users.length,
-      galleryItems: serverGallery.length
+      counts: {
+        announcements: announcementCount,
+        communityPosts: communityPostCount,
+        users: userCount,
+        galleryItems: galleryItemCount
+      },
+      announcements: announcements.map(toAnnouncement),
+      posts: posts.map(toCommunityPost),
+      users: users.map(toUser)
     }
   });
 }

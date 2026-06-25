@@ -10,7 +10,7 @@ export function SiteFooter() {
           <p className="text-2xl font-bold">{siteName}</p>
           <p className="mt-2 text-sm tracking-[0.18em] text-white/42">{siteNameEn}</p>
           <p className="mt-5 max-w-md text-sm leading-7 text-white/62">
-            琢一束光，织一场梦。这里是属于创造者与玩家的方块梦境。
+            蓝水警尘梦，夜吟开草堂。
           </p>
         </div>
         <div>
