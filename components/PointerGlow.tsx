@@ -4,9 +4,10 @@ import { useEffect, useRef } from "react";
 
 export function PointerGlow() {
   const glowRef = useRef<HTMLDivElement>(null);
+  const tapGlowRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!glowRef.current || window.matchMedia("(hover: none) and (pointer: coarse)").matches) return;
+    if (!glowRef.current) return;
     const element = glowRef.current;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
@@ -34,12 +35,29 @@ export function PointerGlow() {
       if (!frame) frame = window.requestAnimationFrame(animate);
     }
 
+    function tap(event: PointerEvent) {
+      const tapElement = tapGlowRef.current;
+      if (!tapElement) return;
+      tapElement.style.left = `${event.clientX}px`;
+      tapElement.style.top = `${event.clientY}px`;
+      tapElement.classList.remove("is-active");
+      window.requestAnimationFrame(() => tapElement.classList.add("is-active"));
+      move(event);
+    }
+
     window.addEventListener("pointermove", move, { passive: true });
+    window.addEventListener("pointerdown", tap, { passive: true });
     return () => {
       window.removeEventListener("pointermove", move);
+      window.removeEventListener("pointerdown", tap);
       if (frame) window.cancelAnimationFrame(frame);
     };
   }, []);
 
-  return <div ref={glowRef} aria-hidden="true" className="pointer-glow" />;
+  return (
+    <>
+      <div ref={glowRef} aria-hidden="true" className="pointer-glow" />
+      <div ref={tapGlowRef} aria-hidden="true" className="tap-glow" />
+    </>
+  );
 }

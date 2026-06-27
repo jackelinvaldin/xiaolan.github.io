@@ -23,7 +23,7 @@ const searchItems = [
   ...announcements.map((item) => ({
     title: item.title,
     description: item.summary,
-    href: `/announcements/${item.slug}`,
+    href: `/announcements/${item.id}`,
     type: "公告"
   })),
   ...communityPosts.map((item) => ({

@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Bell, House, List, UserCircle, X } from "@phosphor-icons/react";
+import { usePathname, useRouter } from "next/navigation";
+import { ArrowLeft, Bell, House, List, UserCircle, X } from "@phosphor-icons/react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { siteName } from "@/lib/data/site";
@@ -19,6 +19,7 @@ const navItems = [
 
 export function SiteHeader() {
   const pathname = usePathname();
+  const router = useRouter();
   const [open, setOpen] = useState(false);
 
   return (
@@ -51,6 +52,15 @@ export function SiteHeader() {
         </nav>
 
         <div className="hidden items-center gap-2 sm:flex">
+          <button
+            type="button"
+            aria-label="返回上一步"
+            title="返回上一步"
+            className="grid size-10 place-items-center rounded-full border border-sky-200/80 bg-white/72 text-sky-900 shadow-[0_10px_30px_rgba(86,153,205,0.12)] transition hover:bg-white"
+            onClick={() => router.back()}
+          >
+            <ArrowLeft size={18} />
+          </button>
           <SiteSearch />
           <button
             type="button"
@@ -68,7 +78,16 @@ export function SiteHeader() {
           </Link>
         </div>
 
-        <div className="ml-auto mr-2 sm:hidden">
+        <div className="ml-auto mr-2 flex items-center gap-2 sm:hidden">
+          <button
+            type="button"
+            aria-label="返回上一步"
+            title="返回上一步"
+            className="grid size-10 place-items-center rounded-full border border-sky-200 bg-white/70 text-sky-950"
+            onClick={() => router.back()}
+          >
+            <ArrowLeft size={18} />
+          </button>
           <SiteSearch />
         </div>
         <button

@@ -33,11 +33,40 @@ const flakes: Array<{ id: string; style: SnowStyle }> = Array.from({ length: 72 
   };
 });
 
+const meteors: Array<{ id: string; style: SnowStyle }> = Array.from({ length: 10 }, (_, index) => {
+  const seeded = (salt: number) => {
+    const value = Math.sin((index + 1) * (salt + 23.71)) * 10000;
+    return value - Math.floor(value);
+  };
+
+  const duration = 5.8 + seeded(1) * 5.5;
+  const delay = -seeded(2) * 18;
+  const top = seeded(3) * 58;
+  const left = 8 + seeded(4) * 76;
+  const length = 90 + seeded(5) * 110;
+  const opacity = 0.28 + seeded(6) * 0.42;
+
+  return {
+    id: `meteor-${index}`,
+    style: {
+      "--meteor-top": `${top}%`,
+      "--meteor-left": `${left}%`,
+      "--meteor-length": `${length}px`,
+      "--meteor-duration": `${duration}s`,
+      "--meteor-delay": `${delay}s`,
+      "--meteor-opacity": `${opacity}`
+    } satisfies SnowStyle
+  };
+});
+
 export function SnowfallEffect() {
   return (
     <div className="home-snowfall" aria-hidden="true">
       {flakes.map((flake) => (
         <span key={flake.id} className="snowflake" style={flake.style} />
+      ))}
+      {meteors.map((meteor) => (
+        <span key={meteor.id} className="meteor" style={meteor.style} />
       ))}
     </div>
   );

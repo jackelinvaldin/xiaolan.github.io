@@ -34,7 +34,7 @@ export function AnnouncementCard({
         {announcement.summary}
       </p>
       <Link
-        href={`/announcements/${announcement.slug}`}
+        href={`/announcements/${announcement.id}`}
         className="mt-5 inline-flex rounded-full border border-sky-200 bg-white/70 px-4 py-2 text-sm font-semibold text-sky-950 transition hover:border-sky-300 hover:bg-white"
       >
         查看详情

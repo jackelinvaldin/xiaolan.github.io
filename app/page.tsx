@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowRight, ChatsCircle, Compass, Sparkle, UsersThree } from "@phosphor-icons/react/dist/ssr";
 import { ActionButton } from "@/components/ActionButton";
 import { AnnouncementCard } from "@/components/announcements/AnnouncementCard";
+import { HomeHeroTitle } from "@/components/home/HomeHeroTitle";
 import { HomeShowcaseCarousel } from "@/components/home/HomeShowcaseCarousel";
 import { GlassPanel } from "@/components/layout/GlassPanel";
 import { MotionSection } from "@/components/MotionSection";
@@ -36,28 +37,10 @@ export default async function HomePage() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_16%,rgba(255,190,226,0.52),transparent_30%),radial-gradient(circle_at_78%_12%,rgba(127,204,255,0.54),transparent_32%),linear-gradient(135deg,#f8fdff,#e7f6ff_48%,#f9eff8)]" />
         <div className="star-field opacity-35" />
 
-        <div className="relative z-10 mx-auto grid min-h-[calc(100dvh-7rem)] max-w-7xl content-center gap-9 lg:grid-cols-[0.78fr_0.92fr] lg:items-center">
-          <div className="reveal-on-scroll justify-self-start">
-            <div className="relative aspect-[4/5] w-full max-w-[500px] overflow-hidden rounded-[30px] border border-white/85 bg-white/70 p-2 shadow-[0_28px_90px_rgba(57,113,180,0.26)] backdrop-blur-sm sm:max-w-[560px] lg:max-h-[74dvh]">
-              <div className="pointer-events-none absolute inset-2 z-10 rounded-[24px] border border-white/70 shadow-[inset_0_0_0_1px_rgba(92,155,202,0.14)]" />
-              <div className="relative h-full overflow-hidden rounded-[24px]">
-                <Image
-                  src="/images/ui/lan-profile-card.webp"
-                  alt="蓝水梦尘主视觉"
-                  fill
-                  priority
-                  sizes="(max-width: 768px) 92vw, 500px"
-                  className="object-cover"
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="reveal-on-scroll">
+        <div className="relative z-10 mx-auto grid min-h-[calc(100dvh-7rem)] max-w-7xl content-center">
+          <div className="reveal-on-scroll max-w-6xl">
             <p className="text-sm font-semibold tracking-[0.2em] text-sky-700/82">{siteNameEn}</p>
-            <h1 className="mt-5 max-w-3xl text-5xl font-black leading-[1.05] text-sky-950 sm:text-6xl lg:text-7xl">
-              琢光绮梦，诗丽画境
-            </h1>
+            <HomeHeroTitle />
             <p className="mt-6 max-w-xl text-lg leading-8 text-sky-900/72">
               蓝水警尘梦，夜吟开草堂。
             </p>

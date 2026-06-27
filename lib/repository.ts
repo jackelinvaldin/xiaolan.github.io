@@ -4,8 +4,9 @@ import { galleryCategoryLabels, serverGallery } from "./data/server-gallery";
 import { users } from "./data/users";
 import { hasDatabase, prisma } from "./db/prisma";
 import { toAnnouncement, toCommunityPost, toProfilePost, toUser } from "./server/mappers";
+import type { Announcement, CommunityPost, ProfilePost, ServerGalleryItem, User } from "./data/types";
 
-export async function getAnnouncements() {
+export async function getAnnouncements(): Promise<Announcement[]> {
   if (!hasDatabase()) return announcements;
 
   try {
@@ -19,7 +20,7 @@ export async function getAnnouncements() {
   }
 }
 
-export async function getAnnouncementById(id: string) {
+export async function getAnnouncementById(id: string): Promise<Announcement | null> {
   const fallback = announcements.find((announcement) => announcement.id === id || announcement.slug === id) ?? null;
   if (!hasDatabase()) {
     return fallback;
@@ -38,7 +39,7 @@ export async function getAnnouncementById(id: string) {
   }
 }
 
-export async function getCommunityPosts() {
+export async function getCommunityPosts(): Promise<CommunityPost[]> {
   if (!hasDatabase()) return communityPosts;
 
   try {
@@ -62,7 +63,7 @@ export async function getCommunityPosts() {
   }
 }
 
-export async function getGalleryItems() {
+export async function getGalleryItems(): Promise<ServerGalleryItem[]> {
   if (!hasDatabase()) return serverGallery;
 
   try {
@@ -71,7 +72,14 @@ export async function getGalleryItems() {
     });
 
     if (!rows.length) return serverGallery;
-    return rows.map((item) => {
+    return rows.map((item: {
+      id: string;
+      title: string;
+      category: string;
+      description: string;
+      imageUrl: string;
+      featured: boolean;
+    }) => {
       const category = item.category.toLowerCase() as keyof typeof galleryCategoryLabels;
       return {
         id: item.id,
@@ -88,7 +96,7 @@ export async function getGalleryItems() {
   }
 }
 
-export async function getProfilePosts(ownerId?: string, includePrivate = false) {
+export async function getProfilePosts(ownerId?: string, includePrivate = false): Promise<ProfilePost[]> {
   if (!hasDatabase()) {
     return profilePosts.filter((post) => {
       const ownerMatch = ownerId ? post.authorId === ownerId : true;
@@ -116,7 +124,7 @@ export async function getProfilePosts(ownerId?: string, includePrivate = false) 
   }
 }
 
-export async function getUsers() {
+export async function getUsers(): Promise<User[]> {
   if (!hasDatabase()) return users;
 
   try {
@@ -130,7 +138,7 @@ export async function getUsers() {
   }
 }
 
-export async function getUserByIdOrUsername(value: string) {
+export async function getUserByIdOrUsername(value: string): Promise<User | null> {
   if (!hasDatabase()) {
     return users.find((user) => user.id === value || user.username === value) ?? null;
   }

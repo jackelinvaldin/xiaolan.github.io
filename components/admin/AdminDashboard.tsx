@@ -489,7 +489,7 @@ export function AdminDashboard() {
                 filteredAnnouncements.map((item) => (
                   <tr key={item.id} className="border-t border-sky-100/80 text-sky-900/72">
                     <td className="px-5 py-4">
-                      <Link href={`/announcements/${item.slug || item.id}`} className="font-bold text-sky-950 hover:text-sky-700">
+                      <Link href={`/announcements/${item.id}`} className="font-bold text-sky-950 hover:text-sky-700">
                         {item.title}
                       </Link>
                       <p className="mt-1 line-clamp-1 text-xs text-sky-900/54">{item.summary}</p>
