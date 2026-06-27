@@ -23,12 +23,12 @@ export function ServerStatusPanel() {
         {rows.map((row) => {
           const Icon = row.icon;
           return (
-            <div key={row.label} className="flex items-center justify-between rounded-2xl bg-white/[0.07] p-3">
-              <span className="flex items-center gap-3 text-sm text-white/62">
+            <div key={row.label} className="flex items-center justify-between rounded-2xl border border-sky-200/55 bg-white/64 p-3">
+              <span className="flex items-center gap-3 text-sm text-sky-900/62">
                 <Icon size={18} />
                 {row.label}
               </span>
-              <span className="text-sm font-semibold text-white">{row.value}</span>
+              <span className="text-sm font-semibold text-sky-950">{row.value}</span>
             </div>
           );
         })}

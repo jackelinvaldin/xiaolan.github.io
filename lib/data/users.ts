@@ -6,7 +6,7 @@ export const users: User[] = [
   {
     id: "u-xiaolan",
     username: "xiaolan",
-    displayName: "小蓝",
+    displayName: "蓝水梦尘",
     role: "admin",
     avatarUrl: "/images/server/server-home-reading.jpg",
     bio: "服务器策划，喜欢把一束光变成一张地图。",

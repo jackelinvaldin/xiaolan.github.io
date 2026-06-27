@@ -16,12 +16,12 @@ export function MapArchivePanel() {
         {archive.map((item) => {
           const Icon = item.icon;
           return (
-            <div key={item.label} className="rounded-2xl border border-white/10 bg-white/[0.06] p-4">
+            <div key={item.label} className="rounded-2xl border border-sky-200/60 bg-white/64 p-4">
               <div className="flex items-center gap-2 text-sm text-dream-blue">
                 <Icon size={18} />
                 {item.label}
               </div>
-              <p className="mt-2 text-sm font-semibold text-white">{item.value}</p>
+              <p className="mt-2 text-sm font-semibold text-sky-950">{item.value}</p>
             </div>
           );
         })}

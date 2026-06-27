@@ -5,7 +5,7 @@ type GlassPanelProps = PropsWithChildren<HTMLAttributes<HTMLDivElement>>;
 
 export function GlassPanel({ children, className, ...props }: GlassPanelProps) {
   return (
-    <div className={cn("glass-panel rounded-[28px]", className)} {...props}>
+    <div className={cn("glass-panel hover-flip-card rounded-[28px]", className)} {...props}>
       {children}
     </div>
   );

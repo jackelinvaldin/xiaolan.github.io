@@ -53,7 +53,7 @@ export function ProfileSpace({ initialPosts }: { initialPosts: ProfilePost[] }) 
       <GlassPanel className="mx-auto max-w-3xl p-8">
         <UserCircle size={36} className="text-dream-blue" />
         <h1 className="mt-5 text-4xl font-black">请先登录</h1>
-        <p className="mt-4 text-base leading-8 text-white/66">
+        <p className="mt-4 text-base leading-8 text-sky-900/68">
           登录后可以进入个人空间，发布动态、收藏内容并管理自己的主页。
         </p>
         <div className="mt-7 flex flex-wrap gap-3">
@@ -116,13 +116,13 @@ export function ProfileSpace({ initialPosts }: { initialPosts: ProfilePost[] }) 
             </div>
             <h1 className="mt-5 text-4xl font-black">{displayName}</h1>
             <p className="mt-2 text-sm text-dream-blue">{roleLabels[role]}</p>
-            <p className="mt-4 text-sm leading-7 text-white/64">
+            <p className="mt-4 text-sm leading-7 text-sky-900/64">
               这里会收纳个人动态、收藏内容、服务器记录和建筑作品。
             </p>
             <button
               type="button"
               onClick={logout}
-              className="mt-5 rounded-full border border-white/14 px-4 py-2 text-sm text-white/70 transition hover:bg-white/10"
+              className="mt-5 rounded-full border border-sky-200/70 bg-white/64 px-4 py-2 text-sm font-semibold text-sky-900 transition hover:bg-white"
             >
               退出登录
             </button>
@@ -134,10 +134,10 @@ export function ProfileSpace({ initialPosts }: { initialPosts: ProfilePost[] }) 
             <BookmarkSimple size={24} className="text-starlight-pink" />
             <h2 className="text-2xl font-bold">我的收藏</h2>
           </div>
-          <div className="mt-5 grid gap-3 text-sm text-white/64">
-            <span className="rounded-2xl bg-white/[0.06] p-4">星环之境地图档案</span>
-            <span className="rounded-2xl bg-white/[0.06] p-4">夏夜共建活动公告</span>
-            <span className="rounded-2xl bg-white/[0.06] p-4">雪境原野巡礼路线</span>
+          <div className="mt-5 grid gap-3 text-sm text-sky-900/66">
+            <span className="rounded-2xl border border-sky-200/60 bg-white/64 p-4">星环之境地图档案</span>
+            <span className="rounded-2xl border border-sky-200/60 bg-white/64 p-4">夏夜共建活动公告</span>
+            <span className="rounded-2xl border border-sky-200/60 bg-white/64 p-4">雪境原野巡礼路线</span>
           </div>
         </GlassPanel>
       </div>
@@ -147,20 +147,20 @@ export function ProfileSpace({ initialPosts }: { initialPosts: ProfilePost[] }) 
           <h2 className="text-2xl font-bold">发布动态</h2>
           <form className="mt-5 grid gap-4" onSubmit={submitPost}>
             <label className="grid gap-2">
-              <span className="text-sm font-semibold text-white/78">动态内容</span>
+              <span className="field-label">动态内容</span>
               <textarea
                 value={content}
                 onChange={(event) => setContent(event.target.value)}
                 rows={4}
-                className="rounded-2xl border border-white/14 bg-white/[0.08] px-4 py-3 text-white outline-none transition focus:border-starlight-pink"
+                className="glass-input rounded-2xl px-4 py-3"
               />
             </label>
             <label className="grid gap-2">
-              <span className="text-sm font-semibold text-white/78">可见性</span>
+              <span className="field-label">可见性</span>
               <select
                 value={visibility}
                 onChange={(event) => setVisibility(event.target.value as Visibility)}
-                className="h-12 rounded-2xl border border-white/14 bg-[#151b31] px-4 text-white outline-none transition focus:border-starlight-pink"
+                className="glass-input glass-select h-12 rounded-2xl px-4"
               >
                 <option value="public">公开</option>
                 <option value="private">私密</option>
@@ -178,18 +178,18 @@ export function ProfileSpace({ initialPosts }: { initialPosts: ProfilePost[] }) 
           </form>
         </GlassPanel>
 
-        {loadingPosts ? <GlassPanel className="p-6 text-white/64">正在读取动态...</GlassPanel> : null}
+        {loadingPosts ? <GlassPanel className="p-6 text-sky-900/64">正在读取动态...</GlassPanel> : null}
 
         {posts.map((post) => (
-          <article key={post.id} className="rounded-[28px] border border-white/12 bg-white/[0.07] p-5">
-            <div className="flex items-center justify-between gap-3 text-sm text-white/52">
+          <article key={post.id} className="surface-card hover-flip-card rounded-[28px] p-5">
+            <div className="flex items-center justify-between gap-3 text-sm text-sky-900/54">
               <span>{formatDate(post.createdAt)}</span>
-              <span className="inline-flex items-center gap-2 rounded-full border border-white/12 px-3 py-1">
+              <span className="glass-chip inline-flex items-center gap-2 rounded-full px-3 py-1">
                 {post.visibility === "public" ? <Eye size={15} /> : <LockSimple size={15} />}
                 {post.visibility === "public" ? "公开" : "私密"}
               </span>
             </div>
-            <p className="mt-4 text-base leading-8 text-white/72">{post.content}</p>
+            <p className="mt-4 text-base leading-8 text-sky-900/72">{post.content}</p>
             {post.imageUrl ? (
               <div className="relative mt-5 aspect-video overflow-hidden rounded-[22px]">
                 <Image src={post.imageUrl} alt="动态配图" fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" />

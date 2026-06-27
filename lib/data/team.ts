@@ -4,7 +4,7 @@ export const teamMembers: TeamMember[] = [
   {
     id: "xiaolan",
     formalName: "蓝水梦尘",
-    displayName: "小蓝",
+    displayName: "蓝水梦尘",
     role: "服务器策划",
     accent: "#82C7FF",
     avatarUrl: "/images/ui/nahida-avatar.png",
@@ -37,4 +37,4 @@ export const teamMembers: TeamMember[] = [
 ];
 
 export const teamIntro =
-  "琢光绮梦是由小蓝、爱莉、The Gravity、独木桥等成员组成的 Minecraft 服务器创作团队。我们围绕服务器策划、运行维护、活动协助与地图创作展开协作，希望在方块世界里创造一个有温度、有风景、有故事的社区空间。";
+  "琢光绮梦是由蓝水梦尘、The Gravity、爱莉、独木桥等成员组成的 Minecraft 服务器创作团队。我们围绕服务器策划、运行维护、活动协助与地图创作展开协作，希望在方块世界里创造一个有温度、有风景、有故事的社区空间。";

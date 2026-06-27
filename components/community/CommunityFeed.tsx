@@ -129,7 +129,7 @@ export function CommunityFeed({ initialPosts }: { initialPosts: CommunityPost[] 
         <div className="flex items-center gap-3">
           <ChatCircleText size={26} className="text-dream-blue" />
           <div>
-            <p className="text-sm text-white/52">当前身份</p>
+            <p className="text-sm text-sky-900/58">当前身份</p>
             <p className="text-2xl font-black">{ready ? roleLabels[role] : "读取中"}</p>
           </div>
         </div>
@@ -137,19 +137,19 @@ export function CommunityFeed({ initialPosts }: { initialPosts: CommunityPost[] 
         {canCreatePost(role) ? (
           <form className="mt-6 grid gap-4" onSubmit={submitPost}>
             <label className="grid gap-2">
-              <span className="text-sm font-semibold text-white/78">标题</span>
+              <span className="field-label">标题</span>
               <input
                 value={title}
                 onChange={(event) => setTitle(event.target.value)}
-                className="h-12 rounded-2xl border border-white/14 bg-white/[0.08] px-4 text-white outline-none transition focus:border-starlight-pink"
+                className="glass-input h-12 rounded-2xl px-4"
               />
             </label>
             <label className="grid gap-2">
-              <span className="text-sm font-semibold text-white/78">分区</span>
+              <span className="field-label">分区</span>
               <select
                 value={category}
                 onChange={(event) => setCategory(event.target.value as CommunityCategory)}
-                className="h-12 rounded-2xl border border-white/14 bg-[#151b31] px-4 text-white outline-none transition focus:border-starlight-pink"
+                className="glass-input glass-select h-12 rounded-2xl px-4"
               >
                 {Object.entries(categoryLabels).map(([value, label]) => (
                   <option key={value} value={value}>
@@ -159,12 +159,12 @@ export function CommunityFeed({ initialPosts }: { initialPosts: CommunityPost[] 
               </select>
             </label>
             <label className="grid gap-2">
-              <span className="text-sm font-semibold text-white/78">内容</span>
+              <span className="field-label">内容</span>
               <textarea
                 value={content}
                 onChange={(event) => setContent(event.target.value)}
                 rows={5}
-                className="rounded-2xl border border-white/14 bg-white/[0.08] px-4 py-3 text-white outline-none transition focus:border-starlight-pink"
+                className="glass-input rounded-2xl px-4 py-3"
               />
             </label>
             <button
@@ -178,8 +178,8 @@ export function CommunityFeed({ initialPosts }: { initialPosts: CommunityPost[] 
             {error ? <p className="text-sm text-starlight-pink">{error}</p> : null}
           </form>
         ) : (
-          <div className="mt-6 rounded-[24px] border border-white/12 bg-white/[0.06] p-5">
-            <p className="text-sm leading-7 text-white/66">游客可以浏览公开留言，但不能发言、点赞或回复。</p>
+          <div className="mt-6 rounded-[24px] border border-sky-200/60 bg-white/64 p-5">
+            <p className="text-sm leading-7 text-sky-900/68">游客可以浏览公开留言，但不能发言、点赞或回复。</p>
             <div className="mt-5">
               <ActionButton href="/login">登录后发言</ActionButton>
             </div>
@@ -191,11 +191,11 @@ export function CommunityFeed({ initialPosts }: { initialPosts: CommunityPost[] 
         {sortedPosts.map((post) => (
           <article
             key={post.id}
-            className="rounded-[28px] border border-white/12 bg-white/[0.07] p-5 transition hover:-translate-y-1 hover:border-dream-blue/42 hover:bg-white/[0.1]"
+            className="surface-card hover-flip-card rounded-[28px] p-5 transition"
           >
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <div className="flex flex-wrap items-center gap-3 text-sm text-white/52">
-                <span className="font-semibold text-white/78">{post.authorName}</span>
+              <div className="flex flex-wrap items-center gap-3 text-sm text-sky-900/58">
+                <span className="font-semibold text-sky-950">{post.authorName}</span>
                 <span>{categoryLabels[post.category]}</span>
                 <span>{formatDate(post.createdAt)}</span>
               </div>
@@ -207,30 +207,30 @@ export function CommunityFeed({ initialPosts }: { initialPosts: CommunityPost[] 
               ) : null}
             </div>
             <h2 className="mt-4 text-2xl font-bold">{post.title}</h2>
-            <p className="mt-3 text-sm leading-7 text-white/66">{post.content}</p>
-            <div className="mt-5 flex gap-3 text-sm text-white/58">
+            <p className="mt-3 text-sm leading-7 text-sky-900/68">{post.content}</p>
+            <div className="mt-5 flex gap-3 text-sm text-sky-900/62">
               <button
                 type="button"
                 disabled={!canCreatePost(role)}
                 onClick={() => void likePost(post.id)}
-                className="inline-flex items-center gap-2 rounded-full border border-white/12 px-3 py-2 disabled:cursor-not-allowed disabled:opacity-50"
+                className="glass-chip inline-flex items-center gap-2 rounded-full px-3 py-2 transition hover:bg-white disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <Heart size={16} />
                 {post.likes}
               </button>
-              <span className="inline-flex items-center rounded-full border border-white/12 px-3 py-2">
+              <span className="glass-chip inline-flex items-center rounded-full px-3 py-2">
                 回复 {post.replies}
               </span>
             </div>
             {post.replyItems?.length ? (
-              <div className="mt-5 grid gap-3 rounded-[22px] border border-white/10 bg-white/[0.04] p-4">
+              <div className="mt-5 grid gap-3 rounded-[22px] border border-sky-200/55 bg-white/58 p-4">
                 {post.replyItems.map((reply) => (
-                  <div key={reply.id} className="border-b border-white/8 pb-3 last:border-b-0 last:pb-0">
-                    <div className="flex flex-wrap items-center gap-2 text-xs text-white/46">
-                      <span className="font-semibold text-white/72">{reply.authorName}</span>
+                  <div key={reply.id} className="border-b border-sky-100 pb-3 last:border-b-0 last:pb-0">
+                    <div className="flex flex-wrap items-center gap-2 text-xs text-sky-900/50">
+                      <span className="font-semibold text-sky-950/82">{reply.authorName}</span>
                       <span>{formatDate(reply.createdAt)}</span>
                     </div>
-                    <p className="mt-2 text-sm leading-6 text-white/68">{reply.content}</p>
+                    <p className="mt-2 text-sm leading-6 text-sky-900/70">{reply.content}</p>
                   </div>
                 ))}
               </div>
@@ -243,12 +243,12 @@ export function CommunityFeed({ initialPosts }: { initialPosts: CommunityPost[] 
                     setReplyDrafts((current) => ({ ...current, [post.id]: event.target.value }))
                   }
                   placeholder="写一条回复"
-                  className="min-h-11 flex-1 rounded-full border border-white/14 bg-white/[0.08] px-4 text-sm text-white outline-none transition placeholder:text-white/38 focus:border-starlight-pink"
+                  className="glass-input min-h-11 flex-1 rounded-full px-4 text-sm"
                 />
                 <button
                   type="submit"
                   disabled={replyPending[post.id] || !replyDrafts[post.id]?.trim()}
-                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 text-sm font-semibold text-white transition hover:bg-white/16 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-sky-200/70 bg-white/72 px-4 text-sm font-semibold text-sky-950 shadow-[0_10px_24px_rgba(82,145,198,0.12)] transition hover:bg-white disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   <PaperPlaneTilt size={16} weight="fill" />
                   {replyPending[post.id] ? "回复中" : "回复"}

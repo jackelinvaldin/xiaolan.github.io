@@ -22,13 +22,16 @@ export async function GET() {
       prisma.communityPost.count(),
       prisma.user.count(),
       prisma.serverGalleryItem.count(),
-      prisma.announcement.findMany({ orderBy: { publishedAt: "desc" }, take: 8 }),
+      prisma.announcement.findMany({ orderBy: { publishedAt: "desc" }, take: 100 }),
       prisma.communityPost.findMany({
-        include: { author: { select: { displayName: true } } },
+        include: {
+          author: { select: { displayName: true } },
+          _count: { select: { replyItems: true } }
+        },
         orderBy: { createdAt: "desc" },
-        take: 8
+        take: 100
       }),
-      prisma.user.findMany({ orderBy: { joinedAt: "desc" }, take: 8 })
+      prisma.user.findMany({ orderBy: { joinedAt: "desc" }, take: 100 })
     ]);
 
   return NextResponse.json({

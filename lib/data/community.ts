@@ -28,7 +28,7 @@ export const communityPosts: CommunityPost[] = [
   {
     id: "p-002",
     authorId: "u-xiaolan",
-    authorName: "小蓝",
+    authorName: "蓝水梦尘",
     title: "想给服务器首页加一个玩家故事位",
     content: "首页可以每周展示一张玩家截图和一句短故事，大家更容易记住服务器里的日常。",
     category: "suggestion",

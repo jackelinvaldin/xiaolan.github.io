@@ -27,7 +27,7 @@ const highlights = [
 
 export function ServerExperience() {
   return (
-    <main className="h-[100dvh] overflow-y-auto scroll-smooth snap-y snap-mandatory bg-[#070b17]">
+    <main className="h-[100dvh] overflow-y-auto scroll-smooth snap-y snap-mandatory bg-[#edf8ff]">
       {serverScenes.map((scene, index) => (
         <SceneSection key={scene.id} scene={scene} index={index} />
       ))}
@@ -55,12 +55,13 @@ function SceneSection({ scene, index }: { scene: (typeof serverScenes)[number]; 
 
       <div className="relative z-10 mx-auto grid min-h-[calc(100dvh-9rem)] max-w-7xl content-center gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
         <motion.div
+          className="on-image"
           initial={reduce ? false : { opacity: 0, x: -42 }}
           whileInView={reduce ? undefined : { opacity: 1, x: 0 }}
           viewport={{ once: false, amount: 0.42 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         >
-          <div className="inline-flex rounded-full border border-white/16 bg-white/10 px-4 py-2 text-xs font-semibold text-white/74 backdrop-blur-xl">
+          <div className="inline-flex rounded-full border border-white/55 bg-white/22 px-4 py-2 text-xs font-semibold text-white/86 backdrop-blur-md">
             {scene.number} / {scene.label}
           </div>
           <h1 className="mt-6 max-w-3xl text-5xl font-black leading-[1.05] tracking-[-0.02em] text-white sm:text-6xl lg:text-7xl">
@@ -88,7 +89,7 @@ function SceneSection({ scene, index }: { scene: (typeof serverScenes)[number]; 
             <MapArchivePanel />
           ) : (
             <GlassPanel className="p-5">
-              <div className="relative aspect-video overflow-hidden rounded-[22px] border border-white/14 bg-[#0b1020]/70">
+              <div className="relative aspect-video overflow-hidden rounded-[22px] border border-white/70 bg-white/60">
                 <Image
                   src="/images/server/purple-aurora-night.jpg"
                   alt="地图预告片"
@@ -96,7 +97,7 @@ function SceneSection({ scene, index }: { scene: (typeof serverScenes)[number]; 
                   sizes="(max-width: 1024px) 100vw, 40vw"
                   className="object-cover opacity-82"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#07101f]/86 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#07101f]/68 to-transparent" />
                 <button
                   type="button"
                   className="absolute left-1/2 top-1/2 grid size-16 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-white text-[#0b1020] shadow-[0_0_42px_rgba(255,159,230,0.42)]"
@@ -105,7 +106,7 @@ function SceneSection({ scene, index }: { scene: (typeof serverScenes)[number]; 
                   <Play size={24} weight="fill" />
                 </button>
               </div>
-              <p className="mt-4 text-sm leading-7 text-white/68">
+              <p className="mt-4 text-sm leading-7 text-sky-900/68">
                 极光巡礼会串联服务器中的夜景、湖面和雪境坐标，适合截图与散步。
               </p>
             </GlassPanel>
@@ -144,7 +145,7 @@ function SceneSection({ scene, index }: { scene: (typeof serverScenes)[number]; 
               key={action.label}
               type="button"
               aria-label={action.label}
-              className="pointer-events-auto grid size-12 place-items-center rounded-full border border-white/14 bg-[#0b1020]/62 text-white/76 backdrop-blur-xl transition hover:bg-white hover:text-[#0b1020]"
+              className="pointer-events-auto grid size-12 place-items-center rounded-full border border-white/75 bg-white/76 text-sky-950 shadow-[0_10px_34px_rgba(29,82,130,0.18)] backdrop-blur-xl transition hover:bg-white"
             >
               <Icon size={20} />
             </button>

@@ -42,46 +42,46 @@ export function RegisterPanel() {
         <UserPlus size={28} className="text-dream-blue" />
         <div>
           <h1 className="text-3xl font-black md:text-5xl">注册成员</h1>
-          <p className="mt-2 text-sm text-white/62">注册账号会成为普通成员。管理员账号不开放注册。</p>
+          <p className="mt-2 text-sm text-sky-900/62">注册账号会成为普通成员。管理员账号不开放注册。</p>
         </div>
       </div>
       <form className="mt-8 grid gap-5" onSubmit={submit}>
         <label className="grid gap-2">
-          <span className="text-sm font-semibold text-white/78">用户名</span>
+          <span className="field-label">用户名</span>
           <input
             value={username}
             onChange={(event) => setUsername(event.target.value)}
             autoComplete="username"
-            className="h-12 rounded-2xl border border-white/14 bg-white/[0.08] px-4 text-white outline-none transition placeholder:text-white/40 focus:border-starlight-pink"
+            className="glass-input h-12 rounded-2xl px-4"
           />
         </label>
         <label className="grid gap-2">
-          <span className="text-sm font-semibold text-white/78">显示昵称</span>
+          <span className="field-label">显示昵称</span>
           <input
             value={displayName}
             onChange={(event) => setDisplayName(event.target.value)}
-            className="h-12 rounded-2xl border border-white/14 bg-white/[0.08] px-4 text-white outline-none transition placeholder:text-white/40 focus:border-starlight-pink"
+            className="glass-input h-12 rounded-2xl px-4"
           />
         </label>
         <label className="grid gap-2">
-          <span className="text-sm font-semibold text-white/78">密码</span>
+          <span className="field-label">密码</span>
           <input
             type="password"
             value={password}
             onChange={(event) => setPassword(event.target.value)}
             autoComplete="new-password"
-            className="h-12 rounded-2xl border border-white/14 bg-white/[0.08] px-4 text-white outline-none transition placeholder:text-white/40 focus:border-starlight-pink"
+            className="glass-input h-12 rounded-2xl px-4"
           />
         </label>
-        {error ? <p className="rounded-2xl border border-red-300/30 bg-red-500/10 p-3 text-sm text-red-100">{error}</p> : null}
+        {error ? <p className="rounded-2xl border border-rose-200 bg-rose-50 p-3 text-sm text-rose-700">{error}</p> : null}
         <button
           type="submit"
           disabled={loading}
-          className="min-h-12 rounded-full border border-white/20 bg-white/18 px-6 font-bold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.2),0_18px_46px_rgba(255,159,230,0.18)] backdrop-blur-2xl transition hover:bg-white/24 disabled:cursor-not-allowed disabled:opacity-60"
+          className="min-h-12 rounded-full border border-sky-200/70 bg-white/76 px-6 font-bold text-sky-950 shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_18px_46px_rgba(82,145,198,0.14)] backdrop-blur-2xl transition hover:bg-white disabled:cursor-not-allowed disabled:opacity-60"
         >
           {loading ? "注册中..." : "注册普通成员"}
         </button>
-        <p className="text-sm text-white/62">
+        <p className="text-sm text-sky-900/62">
           已有账号？{" "}
           <Link href="/login" className="font-semibold text-dream-blue">
             去登录

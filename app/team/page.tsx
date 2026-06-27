@@ -19,7 +19,7 @@ export default function TeamPage() {
           <h1 className="mt-5 text-5xl font-black leading-[1.05] tracking-[-0.02em] md:text-7xl">
             琢光绮梦团队
           </h1>
-          <p className="mt-6 max-w-2xl text-lg leading-9 text-white/68">{teamIntro}</p>
+          <p className="mt-6 max-w-2xl text-lg leading-9 text-sky-900/68">{teamIntro}</p>
         </div>
         <GlassPanel className="overflow-hidden p-3">
           <div className="relative min-h-[460px] overflow-hidden rounded-[24px]">
@@ -52,7 +52,7 @@ export default function TeamPage() {
                   <div>
                     <h2 className="text-3xl font-black">{member.formalName}</h2>
                     <p className="mt-4 text-lg font-semibold text-dream-blue">{member.role}</p>
-                    <p className="mt-3 text-sm leading-7 text-white/66">{member.description}</p>
+                    <p className="mt-3 text-sm leading-7 text-sky-900/66">{member.description}</p>
                   </div>
                 </div>
               </GlassPanel>

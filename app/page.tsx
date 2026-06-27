@@ -4,7 +4,6 @@ import { ArrowRight, ChatsCircle, Compass, Sparkle, UsersThree } from "@phosphor
 import { ActionButton } from "@/components/ActionButton";
 import { AnnouncementCard } from "@/components/announcements/AnnouncementCard";
 import { HomeShowcaseCarousel } from "@/components/home/HomeShowcaseCarousel";
-import { HomeSnowfall } from "@/components/home/HomeSnowfall";
 import { GlassPanel } from "@/components/layout/GlassPanel";
 import { MotionSection } from "@/components/MotionSection";
 import { getAnnouncements, getCommunityPosts, getGalleryItems } from "@/lib/repository";
@@ -33,7 +32,6 @@ export default async function HomePage() {
 
   return (
     <main>
-      <HomeSnowfall />
       <section className="relative min-h-[100dvh] overflow-hidden px-4 pt-28">
         <Image
           src="/images/server/server-home-reading.jpg"
@@ -47,7 +45,7 @@ export default async function HomePage() {
         <div className="star-field" />
 
         <div className="relative z-10 mx-auto grid min-h-[calc(100dvh-7rem)] max-w-7xl content-center gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
-          <div>
+          <div className="on-image">
             <p className="text-sm font-semibold tracking-[0.2em] text-dream-blue/82">{siteNameEn}</p>
             <h1 className="mt-5 max-w-3xl text-5xl font-black leading-[1.05] text-white sm:text-6xl lg:text-7xl">
               琢光绮梦，诗丽画境
@@ -67,16 +65,16 @@ export default async function HomePage() {
             <div className="grid gap-4 sm:grid-cols-[1.2fr_0.8fr]">
               <div className="relative min-h-[360px] overflow-hidden rounded-[24px]">
                 <Image
-                  src="/images/server/storm-ring-relic.jpg"
+                  src="/images/server/server-home-reading.jpg"
                   alt="星环之境"
                   fill
                   sizes="(max-width: 1024px) 100vw, 45vw"
                   className="object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#07101f]/82 to-transparent" />
-                <div className="absolute bottom-5 left-5 right-5">
+                <div className="on-image absolute bottom-5 left-5 right-5">
                   <p className="text-sm text-dream-blue">最新地图</p>
-                  <h2 className="mt-2 text-3xl font-black">星环之境</h2>
+                  <h2 className="mt-2 text-3xl font-black text-white">星环之境</h2>
                 </div>
               </div>
               <div className="grid gap-4">
@@ -85,8 +83,8 @@ export default async function HomePage() {
                   ["地图档案", "雨幕遗构"],
                   ["社区活动", "周末共建"]
                 ].map(([label, value]) => (
-                  <div key={label} className="rounded-[24px] border border-white/12 bg-white/[0.07] p-5">
-                    <p className="text-sm text-white/52">{label}</p>
+                  <div key={label} className="rounded-[24px] border border-sky-200/60 bg-white/68 p-5 shadow-[0_12px_28px_rgba(82,145,198,0.1)]">
+                    <p className="text-sm text-sky-800/70">{label}</p>
                     <p className="mt-2 text-2xl font-black">{value}</p>
                   </div>
                 ))}
@@ -101,11 +99,11 @@ export default async function HomePage() {
           <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
             <div>
               <p className="text-sm font-semibold tracking-[0.18em] text-starlight-pink/86">SERVER MESSAGE</p>
-              <h2 className="mt-4 text-4xl font-black text-white md:text-5xl">服务器寄语</h2>
+              <h2 className="mt-4 text-4xl font-black text-sky-950 md:text-5xl">服务器寄语</h2>
             </div>
             <GlassPanel className="relative overflow-hidden p-7 md:p-9">
               <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-starlight-pink/70 to-transparent" />
-              <div className="grid gap-3 text-base leading-8 text-white/76 md:text-lg">
+              <div className="grid gap-3 text-base leading-8 text-sky-950/78 md:text-lg">
                 {serverMessage.map((line) => (
                   <p key={line}>{line}</p>
                 ))}
@@ -113,11 +111,11 @@ export default async function HomePage() {
             </GlassPanel>
           </div>
 
-          <div className="mt-12 grid items-end gap-4 md:grid-cols-4">
+          <div className="no-scrollbar mt-10 grid auto-cols-[74%] grid-flow-col items-stretch gap-4 overflow-x-auto pb-3 [scroll-snap-type:x_mandatory] sm:auto-cols-[46%] lg:auto-cols-[24%]">
             {teamMembers.map((member) => (
-              <GlassPanel key={member.id} className="flex min-h-[310px] flex-col justify-end p-6">
+              <GlassPanel key={member.id} className="flex min-h-[210px] flex-col justify-end p-5 [scroll-snap-align:start]">
                 {member.avatarUrl ? (
-                  <div className="relative mb-5 size-20 overflow-hidden rounded-[24px] border border-white/20 shadow-[0_18px_48px_rgba(255,159,230,0.24)]">
+                  <div className="relative mb-4 size-14 overflow-hidden rounded-[18px] border border-white/70 shadow-[0_14px_36px_rgba(255,159,230,0.18)]">
                     <Image
                       src={member.avatarUrl}
                       alt={`${member.displayName}头像`}
@@ -128,15 +126,15 @@ export default async function HomePage() {
                   </div>
                 ) : (
                   <div
-                    className="mb-5 grid size-12 place-items-center rounded-2xl text-[#07101f]"
+                    className="mb-4 grid size-11 place-items-center rounded-2xl text-[#07101f]"
                     style={{ background: member.accent }}
                   >
                     <UsersThree size={22} weight="fill" />
                   </div>
                 )}
-                <h3 className="text-2xl font-bold">{member.displayName}</h3>
+                <h3 className="text-xl font-bold">{member.displayName}</h3>
                 <p className="mt-1 text-sm text-dream-blue">{member.role}</p>
-                <p className="mt-4 text-sm leading-7 text-white/62">{member.description}</p>
+                <p className="mt-3 line-clamp-3 text-sm leading-6 text-sky-900/68">{member.description}</p>
               </GlassPanel>
             ))}
           </div>
@@ -148,7 +146,7 @@ export default async function HomePage() {
           <div>
             <Compass size={34} className="text-starlight-pink" />
             <h2 className="mt-5 text-4xl font-black md:text-5xl">服务器展示</h2>
-            <p className="mt-5 max-w-lg text-base leading-8 text-white/64">
+            <p className="mt-5 max-w-lg text-base leading-8 text-sky-900/68">
               从玩家日常到雨幕遗构，服务器专区用真实截图串起每个场景。
             </p>
             <div className="mt-7">
@@ -164,7 +162,7 @@ export default async function HomePage() {
           <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <h2 className="text-4xl font-black md:text-5xl">最新公告</h2>
-              <p className="mt-4 max-w-2xl text-base leading-8 text-white/64">
+              <p className="mt-4 max-w-2xl text-base leading-8 text-sky-900/68">
                 维护、活动、版本更新和地图预览会集中发布在公告区。
               </p>
             </div>
@@ -192,13 +190,13 @@ export default async function HomePage() {
             </div>
             <div className="mt-6 grid gap-4">
               {communityPosts.slice(0, 3).map((post) => (
-                <article key={post.id} className="rounded-[22px] border border-white/10 bg-white/[0.06] p-5">
-                  <div className="flex flex-wrap items-center gap-3 text-sm text-white/52">
+                <article key={post.id} className="surface-card hover-flip-card rounded-[22px] p-5">
+                  <div className="flex flex-wrap items-center gap-3 text-sm text-sky-900/58">
                     <span>{post.authorName}</span>
                     <time dateTime={post.createdAt}>{formatDateTime(post.createdAt)}</time>
                   </div>
                   <h3 className="mt-3 text-xl font-bold">{post.title}</h3>
-                  <p className="mt-3 text-sm leading-7 text-white/62">{post.content}</p>
+                  <p className="mt-3 text-sm leading-7 text-sky-900/68">{post.content}</p>
                 </article>
               ))}
             </div>
@@ -213,7 +211,7 @@ export default async function HomePage() {
                 className="object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#07101f]/88 to-transparent" />
-              <div className="absolute bottom-6 left-6 right-6">
+              <div className="on-image absolute bottom-6 left-6 right-6">
                 <Sparkle size={28} className="text-dream-blue" />
                 <p className="mt-4 text-2xl font-black">把玩家故事留在这里。</p>
                 <p className="mt-3 text-sm leading-7 text-white/66">

@@ -16,7 +16,7 @@ export async function ensureAdminUser(usernameInput: string, password: string) {
   const expectedPassword = process.env.ADMIN_PASSWORD;
   if (!expectedPassword || password !== expectedPassword) return null;
 
-  const displayName = process.env.ADMIN_DISPLAY_NAME ?? "小蓝";
+  const displayName = process.env.ADMIN_DISPLAY_NAME ?? "蓝水梦尘";
   const passwordHash = hashPassword(expectedPassword);
 
   const existing = await prisma.user.findUnique({ where: { username } });

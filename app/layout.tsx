@@ -3,6 +3,7 @@ import { Noto_Sans_SC, Noto_Serif_SC } from "next/font/google";
 import "./globals.css";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
+import { HomeSnowfall } from "@/components/home/HomeSnowfall";
 import { PointerGlow } from "@/components/PointerGlow";
 import { siteName } from "@/lib/data/site";
 
@@ -49,6 +50,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="zh-CN" className={`${notoSans.variable} ${notoSerif.variable}`}>
       <body className="font-sans antialiased">
+        <HomeSnowfall />
         <PointerGlow />
         <SiteHeader />
         {children}

@@ -21,7 +21,7 @@ export default function ServerMapsPage() {
         <div>
           <p className="text-sm font-semibold tracking-[0.2em] text-dream-blue/82">MAPS</p>
           <h1 className="mt-5 text-5xl font-black leading-[1.05] tracking-[-0.02em] md:text-7xl">地图档案与区域介绍</h1>
-          <p className="mt-6 max-w-xl text-lg leading-8 text-white/66">
+          <p className="mt-6 max-w-xl text-lg leading-8 text-sky-900/68">
             将服务器地图按故事、探索难度、坐标和推荐玩法整理，方便玩家进入不同区域。
           </p>
           <div className="mt-8">
@@ -31,7 +31,7 @@ export default function ServerMapsPage() {
         <GlassPanel className="overflow-hidden p-3">
           <div className="relative min-h-[480px] overflow-hidden rounded-[24px]">
             <Image
-              src="/images/server/storm-ring-relic.jpg"
+              src="/images/server/server-home-reading.jpg"
               alt="星环之境地图档案"
               fill
               priority
@@ -49,7 +49,7 @@ export default function ServerMapsPage() {
             <GlassPanel key={block.title} className="p-6">
               <Icon size={26} className="text-starlight-pink" />
               <h2 className="mt-4 text-2xl font-bold">{block.title}</h2>
-              <p className="mt-3 text-sm leading-7 text-white/64">{block.text}</p>
+              <p className="mt-3 text-sm leading-7 text-sky-900/66">{block.text}</p>
             </GlassPanel>
           );
         })}

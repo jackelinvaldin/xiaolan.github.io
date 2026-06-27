@@ -3,7 +3,7 @@ import type { ServerGalleryItem } from "@/lib/data/types";
 
 export function ServerGalleryCard({ item }: { item: ServerGalleryItem }) {
   return (
-    <article className="group overflow-hidden rounded-[28px] border border-white/12 bg-white/[0.07]">
+    <article className="surface-card hover-flip-card group overflow-hidden rounded-[28px]">
       <div className="relative aspect-[4/3] overflow-hidden">
         <Image
           src={item.imageUrl}
@@ -17,7 +17,7 @@ export function ServerGalleryCard({ item }: { item: ServerGalleryItem }) {
       <div className="p-5">
         <p className="text-xs text-dream-blue/82">{item.categoryName}</p>
         <h3 className="mt-2 text-xl font-bold">{item.title}</h3>
-        <p className="mt-3 text-sm leading-7 text-white/62">{item.description}</p>
+        <p className="mt-3 text-sm leading-7 text-sky-900/66">{item.description}</p>
       </div>
     </article>
   );

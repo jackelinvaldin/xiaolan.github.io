@@ -33,8 +33,8 @@ export const serverGallery: ServerGalleryItem[] = [
     title: "雨幕遗构",
     category: "future",
     categoryName: "地图档案",
-    description: "暴雨中的未来建筑群，作为第三屏压轴场景。",
-    imageUrl: "/images/server/storm-ring-relic.jpg",
+    description: "以服务器首页素材作为星环之境的清晰背景，保留玩家日常与地图入口的连续感。",
+    imageUrl: "/images/server/server-home-reading.jpg",
     featured: true
   },
   {
@@ -138,7 +138,7 @@ export const serverScenes = [
     label: "未来遗构",
     title: "星环之境",
     subtitle: "穿越云雾与雨幕，探索被遗忘的未来文明。",
-    imageUrl: "/images/server/storm-ring-relic.jpg",
+    imageUrl: "/images/server/server-home-reading.jpg",
     primaryAction: "进入地图",
     secondaryAction: "坐标档案"
   }

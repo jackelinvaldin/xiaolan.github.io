@@ -16,12 +16,12 @@ export default async function AnnouncementsPage() {
       <section className="mx-auto max-w-7xl">
         <p className="text-sm font-semibold tracking-[0.2em] text-dream-blue/82">ANNOUNCEMENTS</p>
         <h1 className="mt-5 text-5xl font-black tracking-[-0.02em] md:text-7xl">公告列表</h1>
-        <p className="mt-6 max-w-2xl text-lg leading-8 text-white/66">
+        <p className="mt-6 max-w-2xl text-lg leading-8 text-sky-900/68">
           维护、活动、版本更新、社区规则、招募和重要通知都会在这里集中展示。
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
           {Object.values(announcementTypeLabels).map((label) => (
-            <span key={label} className="rounded-full border border-white/12 bg-white/8 px-4 py-2 text-sm text-white/70">
+            <span key={label} className="rounded-full border border-sky-200 bg-white/72 px-4 py-2 text-sm text-sky-900/72">
               {label}
             </span>
           ))}

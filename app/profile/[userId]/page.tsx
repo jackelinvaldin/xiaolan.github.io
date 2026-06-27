@@ -34,19 +34,19 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
               <UserCircle size={52} weight="fill" />
             </div>
             <h1 className="mt-5 text-4xl font-black">{user.displayName}</h1>
-            <p className="mt-3 max-w-2xl text-sm leading-7 text-white/66">{user.bio}</p>
+            <p className="mt-3 max-w-2xl text-sm leading-7 text-sky-900/66">{user.bio}</p>
           </div>
         </GlassPanel>
 
         {posts.length ? (
           posts.map((post) => (
             <GlassPanel key={post.id} className="p-6">
-              <div className="flex items-center gap-2 text-sm text-white/54">
+              <div className="flex items-center gap-2 text-sm text-sky-900/54">
                 <Eye size={16} />
                 公开动态
                 <span>{post.createdAt}</span>
               </div>
-              <p className="mt-4 text-base leading-8 text-white/72">{post.content}</p>
+              <p className="mt-4 text-base leading-8 text-sky-900/72">{post.content}</p>
               {post.imageUrl ? (
                 <div className="relative mt-5 aspect-video overflow-hidden rounded-[22px]">
                   <Image src={post.imageUrl} alt="公开动态配图" fill sizes="(max-width: 1024px) 100vw, 56vw" className="object-cover" />
@@ -55,7 +55,7 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
             </GlassPanel>
           ))
         ) : (
-          <GlassPanel className="p-7 text-white/64">这个空间暂时没有公开动态。</GlassPanel>
+          <GlassPanel className="p-7 text-sky-900/64">这个空间暂时没有公开动态。</GlassPanel>
         )}
       </section>
     </main>
