@@ -179,6 +179,42 @@ textarea {
   animation: star-drift 18s linear infinite;
 }
 
+.home-snowfall {
+  position: fixed;
+  inset: 0;
+  z-index: 24;
+  pointer-events: none;
+  overflow: hidden;
+  contain: paint;
+  mask-image: linear-gradient(to bottom, transparent 0%, black 8%, black 92%, transparent 100%);
+}
+
+.snowflake {
+  position: absolute;
+  top: -9vh;
+  left: var(--snow-left);
+  width: var(--snow-size);
+  height: var(--snow-size);
+  border-radius: 999px;
+  opacity: 0;
+  background:
+    radial-gradient(circle at 38% 34%, rgba(255, 255, 255, 0.98), rgba(235, 248, 255, 0.72) 48%, rgba(255, 255, 255, 0.14) 72%, transparent 100%);
+  box-shadow:
+    0 0 8px rgba(255, 255, 255, 0.38),
+    0 0 18px rgba(130, 199, 255, 0.14);
+  animation: snow-fall var(--snow-duration) linear var(--snow-delay) infinite;
+  will-change: transform, opacity;
+}
+
+.snowflake::after {
+  position: absolute;
+  inset: -42%;
+  border-radius: inherit;
+  content: "";
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.22), transparent 62%);
+  animation: snow-sway var(--snow-sway-duration) ease-in-out var(--snow-delay) infinite alternate;
+}
+
 .no-scrollbar {
   scrollbar-width: none;
 }
@@ -214,6 +250,32 @@ textarea {
   }
   to {
     transform: rotate(360deg) scale(1);
+  }
+}
+
+@keyframes snow-fall {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, -12vh, 0) rotate(0deg);
+  }
+  9% {
+    opacity: var(--snow-opacity);
+  }
+  88% {
+    opacity: var(--snow-opacity);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--snow-drift), 112vh, 0) rotate(180deg);
+  }
+}
+
+@keyframes snow-sway {
+  from {
+    transform: translate3d(var(--snow-sway-start), 0, 0);
+  }
+  to {
+    transform: translate3d(var(--snow-sway-end), 0, 0);
   }
 }
 

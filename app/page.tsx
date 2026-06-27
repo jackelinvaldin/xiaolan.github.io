@@ -4,6 +4,7 @@ import { ArrowRight, ChatsCircle, Compass, Sparkle, UsersThree } from "@phosphor
 import { ActionButton } from "@/components/ActionButton";
 import { AnnouncementCard } from "@/components/announcements/AnnouncementCard";
 import { HomeShowcaseCarousel } from "@/components/home/HomeShowcaseCarousel";
+import { HomeSnowfall } from "@/components/home/HomeSnowfall";
 import { GlassPanel } from "@/components/layout/GlassPanel";
 import { MotionSection } from "@/components/MotionSection";
 import { getAnnouncements, getCommunityPosts, getGalleryItems } from "@/lib/repository";
@@ -32,6 +33,7 @@ export default async function HomePage() {
 
   return (
     <main>
+      <HomeSnowfall />
       <section className="relative min-h-[100dvh] overflow-hidden px-4 pt-28">
         <Image
           src="/images/server/server-home-reading.jpg"
