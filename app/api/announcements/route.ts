@@ -39,12 +39,16 @@ export async function GET() {
     return NextResponse.json({ data: await getAnnouncements() });
   }
 
-  const rows = await prisma.announcement.findMany({
-    orderBy: [{ pinned: "desc" }, { publishedAt: "desc" }],
-    take: 100
-  });
+  try {
+    const rows = await prisma.announcement.findMany({
+      orderBy: [{ pinned: "desc" }, { publishedAt: "desc" }],
+      take: 100
+    });
 
-  return NextResponse.json({ data: rows.map(toAnnouncement) });
+    return NextResponse.json({ data: rows.length ? rows.map(toAnnouncement) : await getAnnouncements() });
+  } catch {
+    return NextResponse.json({ data: await getAnnouncements() });
+  }
 }
 
 export async function POST(request: Request) {

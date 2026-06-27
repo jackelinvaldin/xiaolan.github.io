@@ -30,11 +30,15 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
             <div className="absolute inset-0 bg-gradient-to-t from-[#07101f]/88 to-transparent" />
           </div>
           <div className="p-7">
-            <div className="-mt-16 grid size-24 place-items-center rounded-[28px] border border-white/16 bg-white text-[#07101f]">
-              <UserCircle size={52} weight="fill" />
+            <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
+              <div className="grid size-24 shrink-0 place-items-center rounded-[28px] border border-sky-100 bg-white text-[#07101f] shadow-[0_18px_44px_rgba(82,145,198,0.16)]">
+                <UserCircle size={52} weight="fill" />
+              </div>
+              <div>
+                <h1 className="text-4xl font-black">{user.displayName}</h1>
+                <p className="mt-3 max-w-2xl text-sm leading-7 text-sky-900/66">{user.bio}</p>
+              </div>
             </div>
-            <h1 className="mt-5 text-4xl font-black">{user.displayName}</h1>
-            <p className="mt-3 max-w-2xl text-sm leading-7 text-sky-900/66">{user.bio}</p>
           </div>
         </GlassPanel>
 

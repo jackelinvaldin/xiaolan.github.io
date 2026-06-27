@@ -28,7 +28,7 @@ export default async function AnnouncementDetailPage({ params }: { params: Promi
           </Link>
           <GlassPanel className="mt-8 p-8 text-center md:p-12">
             <p className="text-sm font-semibold tracking-[0.18em] text-starlight-pink/90">ANNOUNCEMENT</p>
-            <h1 className="mt-4 text-4xl font-black text-sky-950">公告不存在</h1>
+            <h1 className="mt-4 text-4xl font-black text-sky-950">公告不存在或已被删除</h1>
             <p className="mt-4 text-base leading-8 text-sky-900/68">
               这条公告可能已经被删除，或者链接地址有误。可以返回公告列表查看最新内容。
             </p>

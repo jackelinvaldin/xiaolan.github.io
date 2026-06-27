@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { ArrowUp, Crown, Gift, Play, Ranking, Question } from "@phosphor-icons/react";
-import { motion, useReducedMotion } from "motion/react";
 import { ActionButton } from "@/components/ActionButton";
 import { GlassPanel } from "@/components/layout/GlassPanel";
 import { MapArchivePanel } from "@/components/server/MapArchivePanel";
@@ -36,7 +35,6 @@ export function ServerExperience() {
 }
 
 function SceneSection({ scene, index }: { scene: (typeof serverScenes)[number]; index: number }) {
-  const reduce = useReducedMotion();
   const isHome = index === 0;
   const isFinal = index === 2;
 
@@ -54,13 +52,7 @@ function SceneSection({ scene, index }: { scene: (typeof serverScenes)[number]; 
       {!isHome ? <RainOverlay stars={!isFinal} /> : <div className="star-field" />}
 
       <div className="relative z-10 mx-auto grid min-h-[calc(100dvh-9rem)] max-w-7xl content-center gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
-        <motion.div
-          className="on-image"
-          initial={reduce ? false : { opacity: 0, x: -42 }}
-          whileInView={reduce ? undefined : { opacity: 1, x: 0 }}
-          viewport={{ once: false, amount: 0.42 }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        >
+        <div className="on-image reveal-on-scroll">
           <div className="inline-flex rounded-full border border-white/55 bg-white/22 px-4 py-2 text-xs font-semibold text-white/86 backdrop-blur-md">
             {scene.number} / {scene.label}
           </div>
@@ -74,15 +66,9 @@ function SceneSection({ scene, index }: { scene: (typeof serverScenes)[number]; 
               {scene.secondaryAction}
             </ActionButton>
           </div>
-        </motion.div>
+        </div>
 
-        <motion.div
-          initial={reduce ? false : { opacity: 0, x: 46 }}
-          whileInView={reduce ? undefined : { opacity: 1, x: 0 }}
-          viewport={{ once: false, amount: 0.38 }}
-          transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
-          className="grid gap-5"
-        >
+        <div className="reveal-on-scroll grid gap-5">
           {isHome ? (
             <ServerStatusPanel />
           ) : isFinal ? (
@@ -111,7 +97,7 @@ function SceneSection({ scene, index }: { scene: (typeof serverScenes)[number]; 
               </p>
             </GlassPanel>
           )}
-        </motion.div>
+        </div>
       </div>
 
       {isHome ? (
@@ -119,13 +105,7 @@ function SceneSection({ scene, index }: { scene: (typeof serverScenes)[number]; 
           <ServerCarousel />
         </div>
       ) : (
-        <motion.div
-          initial={reduce ? false : { opacity: 0, y: 36 }}
-          whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
-          viewport={{ once: false, amount: 0.18 }}
-          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          className="relative z-10 mx-auto grid max-w-7xl gap-3 sm:grid-cols-3"
-        >
+        <div className="reveal-on-scroll relative z-10 mx-auto grid max-w-7xl gap-3 sm:grid-cols-3">
           {highlights.map((item) => (
             <GlassPanel key={item} className="px-5 py-4">
               <div className="flex items-center gap-3">
@@ -134,7 +114,7 @@ function SceneSection({ scene, index }: { scene: (typeof serverScenes)[number]; 
               </div>
             </GlassPanel>
           ))}
-        </motion.div>
+        </div>
       )}
 
       <div className="pointer-events-none absolute right-4 top-1/2 z-20 hidden -translate-y-1/2 gap-3 lg:grid">

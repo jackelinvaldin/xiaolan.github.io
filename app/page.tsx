@@ -32,25 +32,33 @@ export default async function HomePage() {
 
   return (
     <main>
-      <section className="relative min-h-[100dvh] overflow-hidden px-4 pt-28">
-        <Image
-          src="/images/server/server-home-reading.jpg"
-          alt="琢光绮梦服务器玩家日常"
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover"
-        />
-        <div className="image-scrim absolute inset-0" />
-        <div className="star-field" />
+      <section className="relative min-h-[100dvh] overflow-hidden px-4 pb-16 pt-28">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_16%,rgba(255,190,226,0.52),transparent_30%),radial-gradient(circle_at_78%_12%,rgba(127,204,255,0.54),transparent_32%),linear-gradient(135deg,#f8fdff,#e7f6ff_48%,#f9eff8)]" />
+        <div className="star-field opacity-35" />
 
-        <div className="relative z-10 mx-auto grid min-h-[calc(100dvh-7rem)] max-w-7xl content-center gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
-          <div className="on-image">
-            <p className="text-sm font-semibold tracking-[0.2em] text-dream-blue/82">{siteNameEn}</p>
-            <h1 className="mt-5 max-w-3xl text-5xl font-black leading-[1.05] text-white sm:text-6xl lg:text-7xl">
+        <div className="relative z-10 mx-auto grid min-h-[calc(100dvh-7rem)] max-w-7xl content-center gap-9 lg:grid-cols-[0.78fr_0.92fr] lg:items-center">
+          <div className="reveal-on-scroll justify-self-start">
+            <div className="relative aspect-[4/5] w-full max-w-[500px] overflow-hidden rounded-[30px] border border-white/85 bg-white/70 p-2 shadow-[0_28px_90px_rgba(57,113,180,0.26)] backdrop-blur-sm sm:max-w-[560px] lg:max-h-[74dvh]">
+              <div className="pointer-events-none absolute inset-2 z-10 rounded-[24px] border border-white/70 shadow-[inset_0_0_0_1px_rgba(92,155,202,0.14)]" />
+              <div className="relative h-full overflow-hidden rounded-[24px]">
+                <Image
+                  src="/images/ui/lan-profile-card.webp"
+                  alt="蓝水梦尘主视觉"
+                  fill
+                  priority
+                  sizes="(max-width: 768px) 92vw, 500px"
+                  className="object-cover"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="reveal-on-scroll">
+            <p className="text-sm font-semibold tracking-[0.2em] text-sky-700/82">{siteNameEn}</p>
+            <h1 className="mt-5 max-w-3xl text-5xl font-black leading-[1.05] text-sky-950 sm:text-6xl lg:text-7xl">
               琢光绮梦，诗丽画境
             </h1>
-            <p className="mt-6 max-w-xl text-lg leading-8 text-white/76">
+            <p className="mt-6 max-w-xl text-lg leading-8 text-sky-900/72">
               蓝水警尘梦，夜吟开草堂。
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
@@ -60,37 +68,6 @@ export default async function HomePage() {
               </ActionButton>
             </div>
           </div>
-
-          <GlassPanel className="relative overflow-hidden p-4">
-            <div className="grid gap-4 sm:grid-cols-[1.2fr_0.8fr]">
-              <div className="relative min-h-[360px] overflow-hidden rounded-[24px]">
-                <Image
-                  src="/images/server/server-home-reading.jpg"
-                  alt="星环之境"
-                  fill
-                  sizes="(max-width: 1024px) 100vw, 45vw"
-                  className="object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#07101f]/82 to-transparent" />
-                <div className="on-image absolute bottom-5 left-5 right-5">
-                  <p className="text-sm text-dream-blue">最新地图</p>
-                  <h2 className="mt-2 text-3xl font-black text-white">星环之境</h2>
-                </div>
-              </div>
-              <div className="grid gap-4">
-                {[
-                  ["在线状态", "稳定运行"],
-                  ["地图档案", "雨幕遗构"],
-                  ["社区活动", "周末共建"]
-                ].map(([label, value]) => (
-                  <div key={label} className="rounded-[24px] border border-sky-200/60 bg-white/68 p-5 shadow-[0_12px_28px_rgba(82,145,198,0.1)]">
-                    <p className="text-sm text-sky-800/70">{label}</p>
-                    <p className="mt-2 text-2xl font-black">{value}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </GlassPanel>
         </div>
       </section>
 

@@ -8,66 +8,84 @@ import { toAnnouncement, toCommunityPost, toProfilePost, toUser } from "./server
 export async function getAnnouncements() {
   if (!hasDatabase()) return announcements;
 
-  const rows = await prisma.announcement.findMany({
-    orderBy: [{ pinned: "desc" }, { publishedAt: "desc" }]
-  });
+  try {
+    const rows = await prisma.announcement.findMany({
+      orderBy: [{ pinned: "desc" }, { publishedAt: "desc" }]
+    });
 
-  return rows.map(toAnnouncement);
+    return rows.length ? rows.map(toAnnouncement) : announcements;
+  } catch {
+    return announcements;
+  }
 }
 
 export async function getAnnouncementById(id: string) {
+  const fallback = announcements.find((announcement) => announcement.id === id || announcement.slug === id) ?? null;
   if (!hasDatabase()) {
-    return announcements.find((announcement) => announcement.id === id || announcement.slug === id) ?? null;
+    return fallback;
   }
 
-  const row = await prisma.announcement.findFirst({
-    where: {
-      OR: [{ id }, { slug: id }]
-    }
-  });
+  try {
+    const row = await prisma.announcement.findFirst({
+      where: {
+        OR: [{ id }, { slug: id }]
+      }
+    });
 
-  return row ? toAnnouncement(row) : null;
+    return row ? toAnnouncement(row) : fallback;
+  } catch {
+    return fallback;
+  }
 }
 
 export async function getCommunityPosts() {
   if (!hasDatabase()) return communityPosts;
 
-  const posts = await prisma.communityPost.findMany({
-    where: { visibility: "PUBLIC" },
-    include: {
-      author: true,
-      replyItems: {
-        include: { author: { select: { displayName: true } } },
-        orderBy: { createdAt: "asc" },
-        take: 20
+  try {
+    const posts = await prisma.communityPost.findMany({
+      where: { visibility: "PUBLIC" },
+      include: {
+        author: true,
+        replyItems: {
+          include: { author: { select: { displayName: true } } },
+          orderBy: { createdAt: "asc" },
+          take: 20
+        },
+        _count: { select: { replyItems: true } }
       },
-      _count: { select: { replyItems: true } }
-    },
-    orderBy: [{ pinned: "desc" }, { createdAt: "desc" }]
-  });
+      orderBy: [{ pinned: "desc" }, { createdAt: "desc" }]
+    });
 
-  return posts.map(toCommunityPost);
+    return posts.length ? posts.map(toCommunityPost) : communityPosts;
+  } catch {
+    return communityPosts;
+  }
 }
 
 export async function getGalleryItems() {
   if (!hasDatabase()) return serverGallery;
 
-  const rows = await prisma.serverGalleryItem.findMany({
-    orderBy: [{ featured: "desc" }, { sortOrder: "asc" }, { createdAt: "desc" }]
-  });
+  try {
+    const rows = await prisma.serverGalleryItem.findMany({
+      orderBy: [{ featured: "desc" }, { sortOrder: "asc" }, { createdAt: "desc" }]
+    });
 
-  return rows.map((item) => {
-    const category = item.category.toLowerCase() as keyof typeof galleryCategoryLabels;
-    return {
-      id: item.id,
-      title: item.title,
-      category,
-      categoryName: galleryCategoryLabels[category],
-      description: item.description,
-      imageUrl: item.imageUrl,
-      featured: item.featured
-    };
-  });
+    if (!rows.length) return serverGallery;
+    return rows.map((item) => {
+      const category = item.category.toLowerCase() as keyof typeof galleryCategoryLabels;
+      return {
+        id: item.id,
+        title: item.title,
+        category,
+        categoryName: galleryCategoryLabels[category],
+        description: item.description,
+        imageUrl: item.imageUrl,
+        featured: item.featured
+      };
+    });
+  } catch {
+    return serverGallery;
+  }
 }
 
 export async function getProfilePosts(ownerId?: string, includePrivate = false) {
@@ -79,25 +97,37 @@ export async function getProfilePosts(ownerId?: string, includePrivate = false) 
     });
   }
 
-  const rows = await prisma.profilePost.findMany({
-    where: {
-      ...(ownerId ? { authorId: ownerId } : {}),
-      ...(includePrivate ? {} : { visibility: "PUBLIC" })
-    },
-    orderBy: { createdAt: "desc" }
-  });
+  try {
+    const rows = await prisma.profilePost.findMany({
+      where: {
+        ...(ownerId ? { authorId: ownerId } : {}),
+        ...(includePrivate ? {} : { visibility: "PUBLIC" })
+      },
+      orderBy: { createdAt: "desc" }
+    });
 
-  return rows.map(toProfilePost);
+    return rows.map(toProfilePost);
+  } catch {
+    return profilePosts.filter((post) => {
+      const ownerMatch = ownerId ? post.authorId === ownerId : true;
+      const visibilityMatch = includePrivate ? true : post.visibility === "public";
+      return ownerMatch && visibilityMatch;
+    });
+  }
 }
 
 export async function getUsers() {
   if (!hasDatabase()) return users;
 
-  const rows = await prisma.user.findMany({
-    orderBy: { joinedAt: "desc" }
-  });
+  try {
+    const rows = await prisma.user.findMany({
+      orderBy: { joinedAt: "desc" }
+    });
 
-  return rows.map(toUser);
+    return rows.length ? rows.map(toUser) : users;
+  } catch {
+    return users;
+  }
 }
 
 export async function getUserByIdOrUsername(value: string) {
@@ -105,11 +135,15 @@ export async function getUserByIdOrUsername(value: string) {
     return users.find((user) => user.id === value || user.username === value) ?? null;
   }
 
-  const row = await prisma.user.findFirst({
-    where: {
-      OR: [{ id: value }, { username: value }]
-    }
-  });
+  try {
+    const row = await prisma.user.findFirst({
+      where: {
+        OR: [{ id: value }, { username: value }]
+      }
+    });
 
-  return row ? toUser(row) : null;
+    return row ? toUser(row) : users.find((user) => user.id === value || user.username === value) ?? null;
+  } catch {
+    return users.find((user) => user.id === value || user.username === value) ?? null;
+  }
 }

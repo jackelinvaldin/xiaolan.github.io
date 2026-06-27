@@ -1,34 +1,45 @@
 "use client";
 
-import { useEffect } from "react";
-import { motion, useMotionValue, useReducedMotion, useSpring } from "motion/react";
+import { useEffect, useRef } from "react";
 
 export function PointerGlow() {
-  const reduce = useReducedMotion();
-  const rawX = useMotionValue(-400);
-  const rawY = useMotionValue(-400);
-  const x = useSpring(rawX, { stiffness: 110, damping: 28, mass: 0.5 });
-  const y = useSpring(rawY, { stiffness: 110, damping: 28, mass: 0.5 });
+  const glowRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (reduce) return;
+    if (!glowRef.current || window.matchMedia("(hover: none) and (pointer: coarse)").matches) return;
+    const element = glowRef.current;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    function move(event: PointerEvent) {
-      rawX.set(event.clientX - 190);
-      rawY.set(event.clientY - 190);
+    let frame = 0;
+    let currentX = -460;
+    let currentY = -460;
+    let targetX = -460;
+    let targetY = -460;
+
+    function animate() {
+      currentX += (targetX - currentX) * 0.18;
+      currentY += (targetY - currentY) * 0.18;
+      element.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
+
+      if (Math.abs(targetX - currentX) > 0.5 || Math.abs(targetY - currentY) > 0.5) {
+        frame = window.requestAnimationFrame(animate);
+      } else {
+        frame = 0;
+      }
     }
 
-    window.addEventListener("pointermove", move);
-    return () => window.removeEventListener("pointermove", move);
-  }, [rawX, rawY, reduce]);
+    function move(event: PointerEvent) {
+      targetX = event.clientX - 210;
+      targetY = event.clientY - 210;
+      if (!frame) frame = window.requestAnimationFrame(animate);
+    }
 
-  if (reduce) return null;
+    window.addEventListener("pointermove", move, { passive: true });
+    return () => {
+      window.removeEventListener("pointermove", move);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
+  }, []);
 
-  return (
-    <motion.div
-      aria-hidden="true"
-      className="pointer-glow"
-      style={{ x, y }}
-    />
-  );
+  return <div ref={glowRef} aria-hidden="true" className="pointer-glow" />;
 }

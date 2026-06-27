@@ -2,7 +2,6 @@
 
 @theme {
   --font-sans: var(--font-noto-sans), "Microsoft YaHei", system-ui, sans-serif;
-  --font-serif: var(--font-noto-serif), "Songti SC", "Noto Serif SC", serif;
   --color-night: #0b1020;
   --color-night-2: #11172d;
   --color-dream-blue: #82c7ff;
@@ -187,9 +186,9 @@ textarea {
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.82),
     inset 0 -1px 0 rgba(110, 166, 210, 0.08),
-    0 22px 66px rgba(81, 145, 196, 0.18);
-  backdrop-filter: blur(14px) saturate(132%);
-  -webkit-backdrop-filter: blur(14px) saturate(132%);
+    0 18px 48px rgba(81, 145, 196, 0.15);
+  backdrop-filter: blur(10px) saturate(124%);
+  -webkit-backdrop-filter: blur(10px) saturate(124%);
 }
 
 .glass-panel [class*="text-white/"],
@@ -209,8 +208,8 @@ textarea {
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  backdrop-filter: blur(22px) saturate(170%);
-  -webkit-backdrop-filter: blur(22px) saturate(170%);
+  backdrop-filter: blur(14px) saturate(150%);
+  -webkit-backdrop-filter: blur(14px) saturate(150%);
 }
 
 .glass-button::before {
@@ -229,15 +228,17 @@ textarea {
   left: 0;
   top: 0;
   z-index: 30;
-  width: 380px;
-  height: 380px;
+  width: 420px;
+  height: 420px;
   border-radius: 999px;
   pointer-events: none;
   background:
-    radial-gradient(circle, rgba(255, 194, 227, 0.23) 0%, rgba(117, 194, 247, 0.18) 38%, transparent 72%);
+    radial-gradient(circle at 42% 42%, rgba(80, 120, 255, 0.3) 0%, rgba(190, 90, 255, 0.24) 35%, rgba(0, 180, 255, 0.2) 58%, transparent 76%);
   mix-blend-mode: multiply;
-  filter: blur(14px);
-  opacity: 0.58;
+  filter: blur(18px);
+  opacity: 0.74;
+  transform: translate3d(-460px, -460px, 0);
+  will-change: transform;
 }
 
 .soft-glow {
@@ -295,7 +296,7 @@ textarea {
   background:
     linear-gradient(135deg, rgba(255, 255, 255, 0.86), rgba(235, 248, 255, 0.66)),
     rgba(255, 255, 255, 0.72) !important;
-  box-shadow: 0 18px 52px rgba(81, 145, 196, 0.14);
+  box-shadow: 0 14px 38px rgba(81, 145, 196, 0.12);
 }
 
 .surface-card [class*="text-white/"],
@@ -320,11 +321,23 @@ textarea {
 
 .hover-flip-card:hover {
   transform: translateY(-5px) rotateX(1.2deg) rotateY(-1.2deg);
-  box-shadow: 0 24px 66px rgba(81, 145, 196, 0.2);
+  box-shadow: 0 18px 48px rgba(81, 145, 196, 0.18);
+}
+
+.hover-flip-card:active {
+  transform: translateY(-2px) scale(0.992);
 }
 
 .reveal-on-scroll {
   animation: reveal-on-scroll 0.72s ease both;
+}
+
+.page-transition {
+  animation: page-enter 0.34s ease both;
+}
+
+.home-showcase-image {
+  animation: image-fade 0.62s ease both;
 }
 
 .home-snowfall {
@@ -438,6 +451,28 @@ textarea {
   }
 }
 
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 8px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes image-fade {
+  from {
+    opacity: 0;
+    transform: scale(1.025);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 @supports (animation-timeline: view()) {
   .reveal-on-scroll,
   .glass-panel,
@@ -460,6 +495,15 @@ textarea {
     animation-iteration-count: 1 !important;
     scroll-behavior: auto !important;
     transition-duration: 0.001ms !important;
+  }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .pointer-glow {
+    left: 50%;
+    top: 8%;
+    opacity: 0.38;
+    transform: translate3d(-50%, 0, 0);
   }
 }
 

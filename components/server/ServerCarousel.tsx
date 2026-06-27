@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { CaretLeft, CaretRight } from "@phosphor-icons/react";
-import { motion, useReducedMotion } from "motion/react";
 import { useMemo, useRef, useState } from "react";
 import { serverGallery } from "@/lib/data/server-gallery";
 
@@ -11,7 +10,6 @@ const cards = serverGallery.slice(0, 5);
 export function ServerCarousel() {
   const trackRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
-  const reduce = useReducedMotion();
 
   const visibleCards = useMemo(() => cards, []);
 
@@ -42,11 +40,9 @@ export function ServerCarousel() {
         }}
       >
         {visibleCards.map((item) => (
-          <motion.article
+          <article
             key={item.id}
-            className="surface-card group overflow-hidden rounded-[28px] [scroll-snap-align:center]"
-            whileHover={reduce ? undefined : { y: -8, rotateX: 1.5, rotateY: -1.5 }}
-            transition={{ type: "spring", stiffness: 130, damping: 18 }}
+            className="surface-card hover-flip-card group overflow-hidden rounded-[28px] [scroll-snap-align:center] active:scale-[0.99]"
           >
             <div className="relative aspect-[16/10] overflow-hidden">
               <Image
@@ -63,7 +59,7 @@ export function ServerCarousel() {
               <h3 className="mt-2 text-lg font-bold">{item.title}</h3>
               <p className="mt-2 line-clamp-2 text-sm leading-6 text-sky-900/64">{item.description}</p>
             </div>
-          </motion.article>
+          </article>
         ))}
       </div>
 

@@ -3,22 +3,20 @@
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import { CaretLeft, CaretRight } from "@phosphor-icons/react";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import type { ServerGalleryItem } from "@/lib/data/types";
 import { cn } from "@/lib/utils";
 
 export function HomeShowcaseCarousel({ items }: { items: ServerGalleryItem[] }) {
-  const reduce = useReducedMotion();
   const slides = useMemo(() => items.slice(0, 5), [items]);
   const [active, setActive] = useState(0);
 
   useEffect(() => {
-    if (reduce || slides.length <= 1) return;
+    if (slides.length <= 1) return;
     const timer = window.setInterval(() => {
       setActive((value) => (value + 1) % slides.length);
     }, 4200);
     return () => window.clearInterval(timer);
-  }, [reduce, slides.length]);
+  }, [slides.length]);
 
   const current = slides[active];
   if (!current) return null;
@@ -34,25 +32,16 @@ export function HomeShowcaseCarousel({ items }: { items: ServerGalleryItem[] }) 
 
   return (
     <div className="relative min-h-[520px] overflow-hidden rounded-[28px] border border-white/80 bg-white/70 shadow-[0_24px_80px_rgba(104,166,214,0.18)]">
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={current.id}
-          className="absolute inset-0"
-          initial={reduce ? false : { opacity: 0, scale: 1.04 }}
-          animate={reduce ? undefined : { opacity: 1, scale: 1 }}
-          exit={reduce ? undefined : { opacity: 0, scale: 0.98 }}
-          transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-        >
-          <Image
-            src={current.imageUrl}
-            alt={current.title}
-            fill
-            sizes="(max-width: 1024px) 100vw, 52vw"
-            className="object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#07101f]/76 via-[#07101f]/16 to-transparent" />
-        </motion.div>
-      </AnimatePresence>
+      <div key={current.id} className="home-showcase-image absolute inset-0">
+        <Image
+          src={current.imageUrl}
+          alt={current.title}
+          fill
+          sizes="(max-width: 1024px) 100vw, 52vw"
+          className="object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#07101f]/76 via-[#07101f]/16 to-transparent" />
+      </div>
 
       <button
         type="button"

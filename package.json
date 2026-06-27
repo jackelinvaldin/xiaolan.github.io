@@ -17,7 +17,6 @@
     "@phosphor-icons/react": "latest",
     "@prisma/client": "6.19.3",
     "clsx": "latest",
-    "motion": "latest",
     "next": "latest",
     "react": "latest",
     "react-dom": "latest",

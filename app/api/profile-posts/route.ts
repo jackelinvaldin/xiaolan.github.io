@@ -33,16 +33,20 @@ export async function GET(request: Request) {
   const ownerId = url.searchParams.get("userId") ?? user.id;
   const mine = ownerId === user.id;
 
-  const rows = await prisma.profilePost.findMany({
-    where: {
-      authorId: ownerId,
-      ...(mine ? {} : { visibility: "PUBLIC" })
-    },
-    orderBy: { createdAt: "desc" },
-    take: 100
-  });
+  try {
+    const rows = await prisma.profilePost.findMany({
+      where: {
+        authorId: ownerId,
+        ...(mine ? {} : { visibility: "PUBLIC" })
+      },
+      orderBy: { createdAt: "desc" },
+      take: 100
+    });
 
-  return NextResponse.json({ data: rows.map(toProfilePost) });
+    return NextResponse.json({ data: rows.map(toProfilePost) });
+  } catch {
+    return NextResponse.json({ data: await getProfilePosts(ownerId, mine) });
+  }
 }
 
 export async function POST(request: Request) {

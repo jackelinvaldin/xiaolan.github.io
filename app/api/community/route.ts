@@ -24,22 +24,26 @@ export async function GET() {
     return NextResponse.json({ data: await getCommunityPosts() });
   }
 
-  const posts = await prisma.communityPost.findMany({
-    where: { visibility: "PUBLIC" },
-    include: {
-      author: { select: { displayName: true } },
-      replyItems: {
-        include: { author: { select: { displayName: true } } },
-        orderBy: { createdAt: "asc" },
-        take: 20
+  try {
+    const posts = await prisma.communityPost.findMany({
+      where: { visibility: "PUBLIC" },
+      include: {
+        author: { select: { displayName: true } },
+        replyItems: {
+          include: { author: { select: { displayName: true } } },
+          orderBy: { createdAt: "asc" },
+          take: 20
+        },
+        _count: { select: { replyItems: true } }
       },
-      _count: { select: { replyItems: true } }
-    },
-    orderBy: [{ pinned: "desc" }, { createdAt: "desc" }],
-    take: 100
-  });
+      orderBy: [{ pinned: "desc" }, { createdAt: "desc" }],
+      take: 100
+    });
 
-  return NextResponse.json({ data: posts.map(toCommunityPost) });
+    return NextResponse.json({ data: posts.length ? posts.map(toCommunityPost) : await getCommunityPosts() });
+  } catch {
+    return NextResponse.json({ data: await getCommunityPosts() });
+  }
 }
 
 export async function POST(request: Request) {

@@ -1,15 +1,17 @@
 "use client";
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { BookmarkSimple, Eye, LockSimple, PaperPlaneTilt, UserCircle } from "@phosphor-icons/react";
+import { BookmarkSimple, Eye, LockSimple, PaperPlaneTilt, ShieldCheck, UserCircle } from "@phosphor-icons/react";
 import { ActionButton } from "@/components/ActionButton";
 import { useMockSession } from "@/components/auth/useMockSession";
 import { GlassPanel } from "@/components/layout/GlassPanel";
-import { canAccessProfile, roleLabels } from "@/lib/auth";
+import { canAccessAdmin, canAccessProfile, roleLabels } from "@/lib/auth";
 import type { ProfilePost, Visibility } from "@/lib/data/types";
 
 export function ProfileSpace({ initialPosts }: { initialPosts: ProfilePost[] }) {
+  const router = useRouter();
   const { role, displayName, logout, ready } = useMockSession();
   const [posts, setPosts] = useState(initialPosts);
   const [content, setContent] = useState("");
@@ -17,6 +19,7 @@ export function ProfileSpace({ initialPosts }: { initialPosts: ProfilePost[] }) 
   const [loadingPosts, setLoadingPosts] = useState(false);
   const [pending, setPending] = useState(false);
   const [error, setError] = useState("");
+  const [adminNotice, setAdminNotice] = useState("");
 
   useEffect(() => {
     if (!ready || !canAccessProfile(role)) return;
@@ -102,30 +105,63 @@ export function ProfileSpace({ initialPosts }: { initialPosts: ProfilePost[] }) 
     });
   }
 
+  function openAdmin() {
+    if (canAccessAdmin(role)) {
+      router.push("/admin");
+      return;
+    }
+    setAdminNotice("当前账号无管理员权限，无法进入管理后台。");
+  }
+
   return (
     <div className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr]">
       <div className="grid gap-6">
         <GlassPanel className="overflow-hidden">
-          <div className="relative h-44">
-            <Image src="/images/server/group-red-lantern.jpg" alt="个人空间封面" fill className="object-cover" />
+          <div className="relative h-44 sm:h-52">
+            <Image
+              src="/images/server/group-red-lantern.jpg"
+              alt="个人空间封面"
+              fill
+              sizes="(max-width: 1024px) 100vw, 42vw"
+              className="object-cover object-center"
+            />
             <div className="absolute inset-0 bg-gradient-to-t from-[#07101f]/88 to-transparent" />
           </div>
           <div className="p-6">
-            <div className="-mt-16 grid size-24 place-items-center rounded-[28px] border border-white/16 bg-[linear-gradient(135deg,#82c7ff,#ff9fe6)] text-[#07101f] shadow-[0_18px_50px_rgba(0,0,0,0.28)]">
-              <UserCircle size={52} weight="fill" />
+            <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
+              <div className="grid size-24 shrink-0 place-items-center rounded-[28px] border border-white/80 bg-[linear-gradient(135deg,#82c7ff,#ff9fe6)] text-[#07101f] shadow-[0_18px_44px_rgba(82,145,198,0.2)]">
+                <UserCircle size={52} weight="fill" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <h1 className="text-4xl font-black">{displayName}</h1>
+                <p className="mt-2 text-sm text-dream-blue">{roleLabels[role]}</p>
+                <p className="mt-4 text-sm leading-7 text-sky-900/64">
+                  这里会收纳个人动态、收藏内容、服务器记录和建筑作品。
+                </p>
+                <div className="mt-5 flex flex-wrap gap-3">
+                  <button
+                    type="button"
+                    onClick={openAdmin}
+                    className="inline-flex min-h-10 items-center gap-2 rounded-full border border-sky-200/70 bg-white/72 px-4 text-sm font-semibold text-sky-950 shadow-[0_12px_28px_rgba(82,145,198,0.12)] transition hover:bg-white active:scale-[0.985]"
+                  >
+                    <ShieldCheck size={17} />
+                    管理员管理
+                  </button>
+                  <button
+                    type="button"
+                    onClick={logout}
+                    className="rounded-full border border-sky-200/70 bg-white/64 px-4 py-2 text-sm font-semibold text-sky-900 transition hover:bg-white"
+                  >
+                    退出登录
+                  </button>
+                </div>
+                {adminNotice ? (
+                  <p className="mt-4 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-semibold text-rose-700">
+                    {adminNotice}
+                  </p>
+                ) : null}
+              </div>
             </div>
-            <h1 className="mt-5 text-4xl font-black">{displayName}</h1>
-            <p className="mt-2 text-sm text-dream-blue">{roleLabels[role]}</p>
-            <p className="mt-4 text-sm leading-7 text-sky-900/64">
-              这里会收纳个人动态、收藏内容、服务器记录和建筑作品。
-            </p>
-            <button
-              type="button"
-              onClick={logout}
-              className="mt-5 rounded-full border border-sky-200/70 bg-white/64 px-4 py-2 text-sm font-semibold text-sky-900 transition hover:bg-white"
-            >
-              退出登录
-            </button>
           </div>
         </GlassPanel>
 

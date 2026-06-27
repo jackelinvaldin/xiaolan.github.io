@@ -2,20 +2,20 @@ import type { CSSProperties } from "react";
 
 type SnowStyle = CSSProperties & Record<`--${string}`, string>;
 
-const flakes: Array<{ id: string; style: SnowStyle }> = Array.from({ length: 46 }, (_, index) => {
+const flakes: Array<{ id: string; style: SnowStyle }> = Array.from({ length: 72 }, (_, index) => {
   const seeded = (salt: number) => {
     const value = Math.sin((index + 1) * (salt + 11.37)) * 10000;
     return value - Math.floor(value);
   };
 
-  const size = 1.4 + seeded(1) * 3.8;
-  const duration = 18 + seeded(2) * 22;
+  const size = 1.2 + seeded(1) * 3.6;
+  const duration = 19 + seeded(2) * 24;
   const delay = -seeded(3) * duration;
-  const drift = (seeded(4) - 0.5) * 120;
-  const sway = 3.8 + seeded(5) * 5.6;
-  const opacity = 0.18 + seeded(6) * 0.34;
-  const swayStart = drift * -0.12;
-  const swayEnd = drift * 0.16;
+  const drift = (seeded(4) - 0.5) * 132;
+  const sway = 4.2 + seeded(5) * 6.8;
+  const opacity = 0.22 + seeded(6) * 0.38;
+  const swayStart = drift * -0.1;
+  const swayEnd = drift * 0.15;
 
   return {
     id: `snow-${index}`,
@@ -33,7 +33,7 @@ const flakes: Array<{ id: string; style: SnowStyle }> = Array.from({ length: 46 
   };
 });
 
-export function HomeSnowfall() {
+export function SnowfallEffect() {
   return (
     <div className="home-snowfall" aria-hidden="true">
       {flakes.map((flake) => (

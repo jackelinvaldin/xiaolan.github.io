@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import { Noto_Sans_SC, Noto_Serif_SC } from "next/font/google";
+import { Noto_Sans_SC } from "next/font/google";
 import "./globals.css";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
-import { HomeSnowfall } from "@/components/home/HomeSnowfall";
+import { PageTransition } from "@/components/layout/PageTransition";
+import { SnowfallEffect } from "@/components/layout/SnowfallEffect";
 import { PointerGlow } from "@/components/PointerGlow";
 import { siteName } from "@/lib/data/site";
 
@@ -13,13 +14,6 @@ const notoSans = Noto_Sans_SC({
   subsets: ["latin"],
   weight: ["400", "500", "700", "900"],
   variable: "--font-noto-sans",
-  display: "swap"
-});
-
-const notoSerif = Noto_Serif_SC({
-  subsets: ["latin"],
-  weight: ["500", "700", "900"],
-  variable: "--font-noto-serif",
   display: "swap"
 });
 
@@ -48,12 +42,12 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="zh-CN" className={`${notoSans.variable} ${notoSerif.variable}`}>
+    <html lang="zh-CN" className={notoSans.variable}>
       <body className="font-sans antialiased">
-        <HomeSnowfall />
+        <SnowfallEffect />
         <PointerGlow />
         <SiteHeader />
-        {children}
+        <PageTransition>{children}</PageTransition>
         <SiteFooter />
       </body>
     </html>

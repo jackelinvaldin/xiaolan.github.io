@@ -7,7 +7,7 @@ export const teamMembers: TeamMember[] = [
     displayName: "蓝水梦尘",
     role: "服务器策划",
     accent: "#82C7FF",
-    avatarUrl: "/images/ui/nahida-avatar.png",
+    avatarUrl: "/images/ui/nahida-avatar.webp",
     description: "负责服务器整体方向、玩法构思和网站内容规划。纳西妲天下第一可爱。"
   },
   {
