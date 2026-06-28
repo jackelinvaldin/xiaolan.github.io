@@ -474,18 +474,19 @@ textarea {
 
 .meteor {
   position: absolute;
-  top: -30vh;
+  top: var(--meteor-top);
   left: var(--meteor-left);
-  width: 2px;
-  height: var(--meteor-length);
+  width: var(--meteor-length);
+  height: 2px;
   border-radius: 999px;
   opacity: 0;
   background:
-    linear-gradient(180deg, transparent, hsl(var(--meteor-hue) 92% 72% / 0.9) 36%, rgba(255, 255, 255, 0.98) 72%, transparent);
+    linear-gradient(90deg, transparent, hsl(var(--meteor-hue) 92% 72% / 0.9) 36%, rgba(255, 255, 255, 0.98) 76%, transparent);
   box-shadow:
     0 0 16px rgba(255, 255, 255, 0.62),
     0 0 34px hsl(var(--meteor-hue) 92% 72% / 0.38);
-  transform: rotate(var(--meteor-tilt)) translate3d(0, 0, 0);
+  transform: translate3d(-18vmin, -18vmin, 0) rotate(45deg);
+  transform-origin: 100% 50%;
   animation: meteor-fall var(--meteor-duration) ease-in-out var(--meteor-delay) infinite;
   will-change: transform, opacity;
 }
@@ -558,18 +559,18 @@ textarea {
   0%,
   66% {
     opacity: 0;
-    transform: rotate(var(--meteor-tilt)) translate3d(0, -12vh, 0);
+    transform: translate3d(-18vmin, -18vmin, 0) rotate(45deg);
   }
   70% {
     opacity: var(--meteor-opacity);
   }
   82% {
     opacity: 0;
-    transform: rotate(var(--meteor-tilt)) translate3d(var(--meteor-drift), 136vh, 0);
+    transform: translate3d(118vmin, 118vmin, 0) rotate(45deg);
   }
   100% {
     opacity: 0;
-    transform: rotate(var(--meteor-tilt)) translate3d(var(--meteor-drift), 136vh, 0);
+    transform: translate3d(118vmin, 118vmin, 0) rotate(45deg);
   }
 }
 

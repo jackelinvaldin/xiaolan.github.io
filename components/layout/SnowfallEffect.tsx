@@ -41,24 +41,22 @@ const meteors: Array<{ id: string; style: SnowStyle }> = Array.from({ length: 10
 
   const duration = 5.8 + seeded(1) * 5.5;
   const delay = -seeded(2) * 18;
-  const left = 5 + seeded(4) * 90;
+  const top = -18 + seeded(3) * 42;
+  const left = -16 + seeded(4) * 72;
   const length = 88 + seeded(5) * 118;
   const opacity = 0.28 + seeded(6) * 0.42;
-  const drift = (seeded(7) - 0.5) * 18;
-  const hue = Math.round(190 + seeded(8) * 160);
-  const tilt = -8 + seeded(9) * 16;
+  const hue = Math.round(seeded(8) * 360);
 
   return {
     id: `meteor-${index}`,
     style: {
+      "--meteor-top": `${top}vh`,
       "--meteor-left": `${left}%`,
       "--meteor-length": `${length}px`,
       "--meteor-duration": `${duration}s`,
       "--meteor-delay": `${delay}s`,
       "--meteor-opacity": `${opacity}`,
-      "--meteor-drift": `${drift}vw`,
-      "--meteor-hue": `${hue}`,
-      "--meteor-tilt": `${tilt}deg`
+      "--meteor-hue": `${hue}`
     } satisfies SnowStyle
   };
 });
