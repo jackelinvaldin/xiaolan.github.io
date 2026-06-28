@@ -370,19 +370,6 @@ textarea {
   animation: image-fade 0.62s ease both;
 }
 
-.mobile-lazy-image-shell {
-  position: relative;
-  overflow: hidden;
-}
-
-.mobile-lazy-image-placeholder {
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(circle at 28% 18%, rgba(255, 255, 255, 0.76), transparent 34%),
-    linear-gradient(135deg, rgba(237, 248, 255, 0.86), rgba(255, 231, 246, 0.72));
-}
-
 .hero-flip-frame {
   position: relative;
   display: block;

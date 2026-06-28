@@ -2,7 +2,6 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Eye, UserCircle } from "@phosphor-icons/react/dist/ssr";
 import { GlassPanel } from "@/components/layout/GlassPanel";
-import { MobileLazyImage } from "@/components/media/MobileLazyImage";
 import { getProfilePosts, getUserByIdOrUsername } from "@/lib/repository";
 
 export const dynamic = "force-dynamic";
@@ -54,10 +53,12 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
               <p className="mt-4 text-base leading-8 text-sky-900/72">{post.content}</p>
               {post.imageUrl ? (
                 <div className="relative mt-5 aspect-video overflow-hidden rounded-[22px]">
-                  <MobileLazyImage
+                  <Image
                     src={post.imageUrl}
                     alt="公开动态配图"
                     fill
+                    loading="lazy"
+                    decoding="async"
                     sizes="(max-width: 1024px) 100vw, 56vw"
                     className="object-cover"
                   />

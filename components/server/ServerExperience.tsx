@@ -1,9 +1,9 @@
 "use client";
 
+import Image from "next/image";
 import { ArrowUp, Crown, Gift, Play, Ranking, Question } from "@phosphor-icons/react";
 import { ActionButton } from "@/components/ActionButton";
 import { GlassPanel } from "@/components/layout/GlassPanel";
-import { MobileLazyImage } from "@/components/media/MobileLazyImage";
 import { MapArchivePanel } from "@/components/server/MapArchivePanel";
 import { RainOverlay } from "@/components/server/RainOverlay";
 import { ServerCarousel } from "@/components/server/ServerCarousel";
@@ -40,12 +40,13 @@ function SceneSection({ scene, index }: { scene: (typeof serverScenes)[number]; 
 
   return (
     <section className="relative min-h-[100dvh] snap-start overflow-hidden px-4 pb-10 pt-28">
-      <MobileLazyImage
+      <Image
         src={scene.imageUrl}
         alt={scene.title}
         fill
         priority={isHome}
-        deferOnMobile={!isHome}
+        loading={isHome ? undefined : "lazy"}
+        decoding="async"
         sizes="100vw"
         className={cn("object-cover", isHome ? "object-center" : "object-center")}
       />
@@ -77,10 +78,12 @@ function SceneSection({ scene, index }: { scene: (typeof serverScenes)[number]; 
           ) : (
             <GlassPanel className="p-5">
               <div className="relative aspect-video overflow-hidden rounded-[22px] border border-white/70 bg-white/60">
-                <MobileLazyImage
+                <Image
                   src="/images/server/purple-aurora-night.jpg"
                   alt="地图预告片"
                   fill
+                  loading="lazy"
+                  decoding="async"
                   sizes="(max-width: 1024px) 100vw, 40vw"
                   className="object-cover opacity-82"
                 />

@@ -1,14 +1,16 @@
-import { MobileLazyImage } from "@/components/media/MobileLazyImage";
+import Image from "next/image";
 import type { ServerGalleryItem } from "@/lib/data/types";
 
 export function ServerGalleryCard({ item }: { item: ServerGalleryItem }) {
   return (
     <article className="surface-card hover-flip-card group overflow-hidden rounded-[28px]">
       <div className="relative aspect-[4/3] overflow-hidden">
-        <MobileLazyImage
+        <Image
           src={item.imageUrl}
           alt={item.title}
           fill
+          loading="lazy"
+          decoding="async"
           sizes="(max-width: 768px) 100vw, 33vw"
           className="object-cover transition duration-700 group-hover:scale-105"
         />

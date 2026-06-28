@@ -25,7 +25,8 @@ function FramePicture({ alt, desktopSrc, mobileSrc, eager = false }: FramePictur
         alt,
         width: 3072,
         height: 3840,
-        sizes: "(max-width: 768px) 72vw, 320px"
+        sizes: "(max-width: 768px) 72vw, 320px",
+        unoptimized: true
       }).props,
     [alt, desktopSrc]
   );
@@ -37,7 +38,8 @@ function FramePicture({ alt, desktopSrc, mobileSrc, eager = false }: FramePictur
         alt,
         width: 720,
         height: 900,
-        sizes: "72vw"
+        sizes: "72vw",
+        unoptimized: true
       }).props,
     [alt, mobileSrc]
   );

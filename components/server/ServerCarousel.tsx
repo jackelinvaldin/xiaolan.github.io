@@ -1,8 +1,8 @@
 "use client";
 
+import Image from "next/image";
 import { CaretLeft, CaretRight } from "@phosphor-icons/react";
 import { useMemo, useRef, useState } from "react";
-import { MobileLazyImage } from "@/components/media/MobileLazyImage";
 import { serverGallery } from "@/lib/data/server-gallery";
 
 const cards = serverGallery.slice(0, 5);
@@ -45,10 +45,12 @@ export function ServerCarousel() {
             className="surface-card hover-flip-card group overflow-hidden rounded-[28px] [scroll-snap-align:center] active:scale-[0.99]"
           >
             <div className="relative aspect-[16/10] overflow-hidden">
-              <MobileLazyImage
+              <Image
                 src={item.imageUrl}
                 alt={item.title}
                 fill
+                loading="lazy"
+                decoding="async"
                 sizes="(max-width: 768px) 76vw, 29vw"
                 className="object-cover transition duration-700 group-hover:scale-[1.06]"
               />
