@@ -35,6 +35,7 @@ export default function ServerMapsPage() {
               alt="星环之境地图档案"
               fill
               priority
+              decoding="async"
               sizes="(max-width: 1024px) 100vw, 52vw"
               className="object-cover"
             />

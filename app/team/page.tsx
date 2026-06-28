@@ -28,6 +28,7 @@ export default function TeamPage() {
               alt="琢光绮梦团队合影"
               fill
               priority
+              decoding="async"
               sizes="(max-width: 1024px) 100vw, 48vw"
               className="object-cover"
             />

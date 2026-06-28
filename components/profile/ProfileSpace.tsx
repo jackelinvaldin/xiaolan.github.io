@@ -7,6 +7,7 @@ import { BookmarkSimple, Eye, LockSimple, PaperPlaneTilt, ShieldCheck, UserCircl
 import { ActionButton } from "@/components/ActionButton";
 import { useMockSession } from "@/components/auth/useMockSession";
 import { GlassPanel } from "@/components/layout/GlassPanel";
+import { MobileLazyImage } from "@/components/media/MobileLazyImage";
 import { canAccessAdmin, canAccessProfile, roleLabels } from "@/lib/auth";
 import type { ProfilePost, Visibility } from "@/lib/data/types";
 
@@ -122,6 +123,7 @@ export function ProfileSpace({ initialPosts }: { initialPosts: ProfilePost[] }) 
               src="/images/server/group-red-lantern.jpg"
               alt="个人空间封面"
               fill
+              decoding="async"
               sizes="(max-width: 1024px) 100vw, 42vw"
               className="object-cover object-center"
             />
@@ -228,7 +230,13 @@ export function ProfileSpace({ initialPosts }: { initialPosts: ProfilePost[] }) 
             <p className="mt-4 text-base leading-8 text-sky-900/72">{post.content}</p>
             {post.imageUrl ? (
               <div className="relative mt-5 aspect-video overflow-hidden rounded-[22px]">
-                <Image src={post.imageUrl} alt="动态配图" fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" />
+                <MobileLazyImage
+                  src={post.imageUrl}
+                  alt="动态配图"
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-cover"
+                />
               </div>
             ) : null}
           </article>

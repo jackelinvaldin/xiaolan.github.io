@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import { CaretLeft, CaretRight } from "@phosphor-icons/react";
+import { MobileLazyImage } from "@/components/media/MobileLazyImage";
 import type { ServerGalleryItem } from "@/lib/data/types";
 import { cn } from "@/lib/utils";
 
@@ -33,7 +33,7 @@ export function HomeShowcaseCarousel({ items }: { items: ServerGalleryItem[] }) 
   return (
     <div className="relative min-h-[520px] overflow-hidden rounded-[28px] border border-white/80 bg-white/70 shadow-[0_24px_80px_rgba(104,166,214,0.18)]">
       <div key={current.id} className="home-showcase-image absolute inset-0">
-        <Image
+        <MobileLazyImage
           src={current.imageUrl}
           alt={current.title}
           fill

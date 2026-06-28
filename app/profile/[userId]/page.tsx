@@ -2,6 +2,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Eye, UserCircle } from "@phosphor-icons/react/dist/ssr";
 import { GlassPanel } from "@/components/layout/GlassPanel";
+import { MobileLazyImage } from "@/components/media/MobileLazyImage";
 import { getProfilePosts, getUserByIdOrUsername } from "@/lib/repository";
 
 export const dynamic = "force-dynamic";
@@ -26,7 +27,7 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
       <section className="mx-auto grid max-w-5xl gap-6">
         <GlassPanel className="overflow-hidden">
           <div className="relative h-56">
-            <Image src="/images/server/group-main-gate.jpg" alt="公开空间封面" fill priority className="object-cover" />
+            <Image src="/images/server/group-main-gate.jpg" alt="公开空间封面" fill priority decoding="async" className="object-cover" />
             <div className="absolute inset-0 bg-gradient-to-t from-[#07101f]/88 to-transparent" />
           </div>
           <div className="p-7">
@@ -53,7 +54,13 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
               <p className="mt-4 text-base leading-8 text-sky-900/72">{post.content}</p>
               {post.imageUrl ? (
                 <div className="relative mt-5 aspect-video overflow-hidden rounded-[22px]">
-                  <Image src={post.imageUrl} alt="公开动态配图" fill sizes="(max-width: 1024px) 100vw, 56vw" className="object-cover" />
+                  <MobileLazyImage
+                    src={post.imageUrl}
+                    alt="公开动态配图"
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 56vw"
+                    className="object-cover"
+                  />
                 </div>
               ) : null}
             </GlassPanel>

@@ -1,11 +1,11 @@
-import Image from "next/image";
+import { MobileLazyImage } from "@/components/media/MobileLazyImage";
 import type { ServerGalleryItem } from "@/lib/data/types";
 
 export function ServerGalleryCard({ item }: { item: ServerGalleryItem }) {
   return (
     <article className="surface-card hover-flip-card group overflow-hidden rounded-[28px]">
       <div className="relative aspect-[4/3] overflow-hidden">
-        <Image
+        <MobileLazyImage
           src={item.imageUrl}
           alt={item.title}
           fill

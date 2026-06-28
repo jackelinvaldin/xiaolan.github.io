@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ChatsCircle, Compass, Sparkle, UsersThree } from "@phosphor-icons/react/dist/ssr";
 import { ActionButton } from "@/components/ActionButton";
@@ -6,6 +5,7 @@ import { AnnouncementCard } from "@/components/announcements/AnnouncementCard";
 import { HomeHeroTitle } from "@/components/home/HomeHeroTitle";
 import { HomeShowcaseCarousel } from "@/components/home/HomeShowcaseCarousel";
 import { GlassPanel } from "@/components/layout/GlassPanel";
+import { MobileLazyImage } from "@/components/media/MobileLazyImage";
 import { MotionSection } from "@/components/MotionSection";
 import { getAnnouncements, getCommunityPosts, getGalleryItems } from "@/lib/repository";
 import { siteNameEn } from "@/lib/data/site";
@@ -76,7 +76,7 @@ export default async function HomePage() {
               <GlassPanel key={member.id} className="flex min-h-[210px] flex-col justify-end p-5 [scroll-snap-align:start]">
                 {member.avatarUrl ? (
                   <div className="relative mb-4 size-14 overflow-hidden rounded-[18px] border border-white/70 shadow-[0_14px_36px_rgba(255,159,230,0.18)]">
-                    <Image
+                    <MobileLazyImage
                       src={member.avatarUrl}
                       alt={`${member.displayName}头像`}
                       fill
@@ -163,7 +163,7 @@ export default async function HomePage() {
           </GlassPanel>
           <GlassPanel className="overflow-hidden">
             <div className="relative min-h-[520px]">
-              <Image
+              <MobileLazyImage
                 src="/images/server/group-red-lantern.jpg"
                 alt="玩家合照"
                 fill
